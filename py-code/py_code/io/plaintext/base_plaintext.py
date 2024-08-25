@@ -3,30 +3,26 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from py_code.data.types import Extension
 from py_code.io.file.gltf2.gltf2 import GLTFFile
 from py_code.io.file.off.off import OffFile
-from typing_extensions import TypedDict
-
-
-class Extras(TypedDict):
-    filename_ext: Extension.ASSET
-    import_path: str
 
 
 @dataclass
-class BasePlainTex:
+class BasePlainText:
     """Base class for all plaintext types"""
 
-    data: Any
-    extras: Extras
+    meshes: Any
+    images: Any
+
+    meshes_dim: int
+    images_dim: int
 
     @classmethod
-    def from_gltf2(cls, gltf_file: GLTFFile) -> BasePlainTex:
+    def from_gltf2(cls, gltf_file: GLTFFile) -> BasePlainText:
         raise NotImplementedError()
 
     @classmethod
-    def from_off(cls, off_file: OffFile) -> BasePlainTex:
+    def from_off(cls, off_file: OffFile) -> BasePlainText:
         raise NotImplementedError()
 
     @property

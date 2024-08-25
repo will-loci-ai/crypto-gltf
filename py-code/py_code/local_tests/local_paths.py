@@ -2,12 +2,12 @@ import glob
 from pathlib import Path
 
 ASSET_IMPORT_DIR = (
-    Path(__file__).parent.parent.parent.parent.resolve() / "assets" / "import"
+    Path(__file__).parent.parent.parent.parent.parent.resolve() / "assets" / "import"
 )
 ASSET_EXPORT_DIR = (
-    Path(__file__).parent.parent.parent.parent.resolve() / "assets" / "export"
+    Path(__file__).parent.parent.parent.parent.parent.resolve() / "assets" / "export"
 )
-IMAGES_DIR = Path(__file__).parent.parent.parent.parent.resolve() / "assets" / "images"
+IMAGES_DIR = Path(__file__).parent.parent.parent.parent.parent.resolve() / "assets" / "images"
 
 asset_paths = [path for path in glob.glob(str(ASSET_IMPORT_DIR / "**"), recursive=True)]
 obj_assets = [path for path in asset_paths if path.lower().endswith(".obj")]

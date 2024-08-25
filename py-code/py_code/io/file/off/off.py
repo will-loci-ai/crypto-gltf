@@ -6,9 +6,8 @@ from dataclasses import dataclass
 import numpy as np
 from loguru import logger
 from py_code.data.asset_file_data_types import AssetFileDataType, OffData
-from py_code.data.base_data import PlnM
-from py_code.io.file.base_file import BaseFile
 from py_code.data.types import CombinedPlnMDataTypes
+from py_code.io.file.base_file import BaseFile
 
 
 @dataclass
@@ -79,23 +78,12 @@ class OffFile(BaseFile):
             i = i + 1
 
         logger.info(f".off file loaded from {import_path}")
-        mesh = [np.array(verts), np.array(faces)]
-        mesh = PlnM.from_list(
-            datatype=CombinedPlnMDataTypes.MESH,
-            data_list=[np.array(verts), np.array(faces)],
-        )
-        if use_colors:
-            colors_plnm = PlnM.from_np_stack(
-                stacked_data=np.array(colors),
-                stacktype="DEPTH",
-                datatype=CombinedPlnMDataTypes.RGBA,
-            )
-        else:
-            colors_plnm = PlnM.from_empty(CombinedPlnMDataTypes.RGBA)
 
         return cls(
             import_path=import_path,
-            data=OffData(mesh=mesh, colors=colors_plnm),
+            data=OffData(
+                verts=np.array(verts), faces=np.array(faces), colors=np.array(colors)
+            ),
             filename_ext=".off",
         )
 
@@ -104,16 +92,16 @@ class OffFile(BaseFile):
 
         off_data = self.data
 
-        verts = off_data.mesh.data[0]
-        faces = off_data.mesh.data[1]
-        colors = off_data.colors.data
+        verts = off_data.verts
+        faces = off_data.faces
+        colors = off_data.colors
 
         # Write geometry to file
         export_filepath = f"{export_dir}/{self.export_filename}"
         export_dir_bin = os.fsencode(export_filepath)
         fp = open(export_dir_bin, "w")
 
-        if not off_data.colors.empty:
+        if colors:
             fp.write("COFF\n")
         else:
             fp.write("OFF\n")
@@ -122,7 +110,7 @@ class OffFile(BaseFile):
 
         for i, vert in enumerate(verts):
             fp.write(f"{vert[0]:.16f} {vert[1]:.16f} {vert[2]:.16f}")
-            if not off_data.colors.empty:
+            if colors:
                 fp.write(f" {colors[i][0]:d} {colors[i][1]:d} {colors[i][2]:d} 255")
             fp.write("\n")
 
