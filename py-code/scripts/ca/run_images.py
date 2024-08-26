@@ -1,6 +1,6 @@
 from PIL import Image
-from py_code.encrypt.ca.base import CACipherParams
-from py_code.encrypt.ca.system import CACipherSystem
+from py_code.encrypt.deprecit.ca.base import CACipherParams
+from py_code.encrypt.deprecit.ca.system import CACipherSystem
 from py_code.io.plaintext.plnm import PlnM
 from py_code.local_tests.local_paths import image_paths
 

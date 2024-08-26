@@ -5,9 +5,9 @@ from time import time
 import numpy as np
 from loguru import logger
 from py_code.data.types import EncryptionResponse
-from py_code.encrypt.adaptive.decrypt import AdaptiveDecryptionModel
-from py_code.encrypt.adaptive.encrypt import AdaptiveEncryptionModel
-from py_code.encrypt.adaptive.types import AdaptiveCipherParams
+from py_code.encrypt.deprecit.adaptive_v1.base import AdaptiveCipherParams
+from py_code.encrypt.deprecit.adaptive_v1.decrypt import AdaptiveDecryptionModel
+from py_code.encrypt.deprecit.adaptive_v1.encrypt import AdaptiveEncryptionModel
 from py_code.io.plaintext.plnm import PlnM
 
 
@@ -32,7 +32,7 @@ class AdaptiveCipherSystem(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
             plnm.meshes[i].astype(np.float32) for i in meshes_float_arrs_idxs
         ]  # convert to float32
         encryption_response = AdaptiveEncryptionModel._encrypt(
-            data=float_arrs, key=key, params=meshes_cipher_params
+            data=float_arrs, key=key, position=meshes_cipher_params.position
         )
 
         for idx, i in enumerate(meshes_float_arrs_idxs):
@@ -61,7 +61,7 @@ class AdaptiveCipherSystem(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         decrypted_data = AdaptiveDecryptionModel._decrypt(
             data=float_arrs,
             key=key,
-            params=meshes_cipher_params,
+            position=meshes_cipher_params.position,
             aad_b64=aad_b64,
         )
         for idx, i in enumerate(meshes_float_arrs_idxs):

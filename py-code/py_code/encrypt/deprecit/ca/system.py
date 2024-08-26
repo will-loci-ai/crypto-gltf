@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 from loguru import logger
-from py_code.encrypt.ca.base import CACipherParams
-from py_code.encrypt.ca.ca import ExpConwaysHCA
-from py_code.encrypt.ca.decrypt import CADecryptionModel
-from py_code.encrypt.ca.encrypt import CAEncryptionModel
-from py_code.encrypt.params import RANDOM_VARIANCE
+from py_code.encrypt.deprecit.ca.base import CACipherParams
+from py_code.encrypt.deprecit.ca.ca import ExpConwaysHCA
+from py_code.encrypt.deprecit.ca.decrypt import CADecryptionModel
+from py_code.encrypt.deprecit.ca.encrypt import CAEncryptionModel
+from py_code.encrypt.deprecit.ca.params import RANDOM_VARIANCE
 from py_code.io.plaintext.plnm import PlnM
 from pydantic import BaseModel, ConfigDict
 

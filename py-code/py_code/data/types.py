@@ -127,9 +127,8 @@ class CombinedPlnMDataTypes:
 
 T = TypeVar("T")
 
-
 class EncryptionResponse(BaseModel, Generic[T]):
-    """Generic for response from encryption model or system"""
+    """Generic response model for encryption model or system"""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
     ciphertext: T

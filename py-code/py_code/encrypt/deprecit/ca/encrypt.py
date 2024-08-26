@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from loguru import logger
-from py_code.encrypt.ca.base import CABaseModel, CACipherParams
-from py_code.encrypt.ca.ca import ExpConwaysHCA
+from py_code.encrypt.deprecit.ca.base import CABaseModel, CACipherParams
+from py_code.encrypt.deprecit.ca.ca import ExpConwaysHCA
 
 
 class CAEncryptionModel(CABaseModel):

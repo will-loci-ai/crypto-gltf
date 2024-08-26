@@ -50,7 +50,8 @@ def aes_gcm_encrypt(message: bytes, key: bytes) -> EncryptionResponse[bytes]:
     ciphertext = encryptor.update(message) + encryptor.finalize()
     aad = b64e(current_time + iv + encryptor.tag)
 
-    aes_gcm_decrypt(ciphertext=ciphertext, aad_b64=aad, key=key, ttl=None)
+    assert len(aad) == 56
+
     return EncryptionResponse[bytes](ciphertext=ciphertext, aad=aad)
 
 
