@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from typing import Any, Literal, NamedTuple
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 JSONDict = dict[str, Any]
-
+from typing import Generic, TypeVar
 
 # FILETYPES
 
@@ -121,3 +121,16 @@ class CombinedPlnMDataTypes:
     RGB = PlnMDataType("RGB", Composition.RGB, True, "RGB")
     RGBA = PlnMDataType("RGBA", Composition.RGBA, True, "RGBA")
     P = PlnMDataType("P", Composition.P, True, "P")
+
+
+# RESPONSE TYPES
+
+T = TypeVar("T")
+
+
+class EncryptionResponse(BaseModel, Generic[T]):
+    """Generic for response from encryption model or system"""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    ciphertext: T
+    aad: bytes

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-from py_code.encrypt.ca.base import CABaseSystem, CACipherParams
+from py_code.encrypt.ca.base import CABaseModel, CACipherParams
 from py_code.encrypt.ca.ca import ExpConwaysHCA
 
 
-class CADecryptionModel(CABaseSystem):
+class CADecryptionModel(CABaseModel):
     """Conways game of life cellular automata encryption model"""
 
     @staticmethod

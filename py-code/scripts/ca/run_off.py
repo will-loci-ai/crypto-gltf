@@ -1,5 +1,5 @@
-from py_code.encrypt.ca_encryption.base import CACipherParams
-from py_code.encrypt.ca_encryption.hazmat import CACipherSystem
+from py_code.encrypt.ca.base import CACipherParams
+from py_code.encrypt.ca.system import CACipherSystem
 from py_code.io.file.off.off import OffFile
 from py_code.io.plaintext.plnm import PlnM
 from py_code.local_tests.local_paths import off_assets

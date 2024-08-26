@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 from loguru import logger
-from py_code.encrypt.ca.base import CABaseSystem, CACipherParams
+from py_code.encrypt.ca.base import CABaseModel, CACipherParams
 from py_code.encrypt.ca.ca import ExpConwaysHCA
 
-class CAEncryptionModel(CABaseSystem):
+
+class CAEncryptionModel(CABaseModel):
     """Conways game of life cellular automata encryption model"""
 
     @staticmethod

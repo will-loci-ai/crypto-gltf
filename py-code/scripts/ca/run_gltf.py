@@ -1,11 +1,8 @@
-import numpy as np
-from PIL import Image
-from py_code.data.types import PlnMDataType
-from py_code.encrypt.ca_encryption.base import CACipherParams
-from py_code.encrypt.ca_encryption.hazmat import CACipherSystem
+from py_code.encrypt.ca.base import CACipherParams
+from py_code.encrypt.ca.system import CACipherSystem
 from py_code.io.file.gltf2.gltf2 import GLTFFile
 from py_code.io.plaintext.plnm import PlnM
-from py_code.local_tests.local_paths import ASSET_EXPORT_DIR, glb_assets, gltf_assets
+from py_code.local_tests.local_paths import glb_assets
 
 if __name__ == "__main__":
 

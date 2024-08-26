@@ -1,4 +1,4 @@
-from typing import Literal,
+from typing import Literal
 
 import numpy as np
 

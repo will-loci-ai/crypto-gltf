@@ -19,7 +19,7 @@ class CACipherParams(BaseModel):
             raise Exception(f"Number of plaintext matrices != number of idl points")
 
 
-class CABaseSystem:
+class CABaseModel:
     """Base model for Conways game of life cellular automata encryption/decryption model"""
 
     def __new__(cls, *args, **kwargs):

@@ -74,7 +74,7 @@ class CACipherSystem(BaseModel):
         logger.info(f"Using CA dimension {dimension}")
         return dimension
 
-    def compute_generations(self):
+    def compute_generations(self) -> None:
         """Compute expHCA generations for mesh and image automatas"""
         self.meshes_expHCA = CAEncryptionModel.compute_gens(
             expHCA=self.meshes_expHCA, cipher_params=self.meshes_cipher_params
@@ -84,7 +84,7 @@ class CACipherSystem(BaseModel):
         )
         self.generations_computed = True
 
-    def encrypt(self):
+    def encrypt(self) -> None:
         """Encrypt all meshes and images"""
         if not self.generations_computed:
             raise Exception("Generations not yet computed")
@@ -99,7 +99,7 @@ class CACipherSystem(BaseModel):
             cipher_params=self.images_cipher_params,
         )
 
-    def decrypt(self):
+    def decrypt(self) -> None:
         """Decrypt all meshes and images"""
         if not self.generations_computed:
             raise Exception("Generations not yet computed")
