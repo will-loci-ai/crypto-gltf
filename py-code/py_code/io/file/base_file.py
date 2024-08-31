@@ -6,9 +6,11 @@ from functools import cached_property
 from tempfile import TemporaryDirectory
 from typing import Any
 
+import numpy as np
 from loci_asset.asset import LociAsset
 from py_code.data.asset_file_data_types import AssetFileDataType
 from py_code.data.types import Extension
+from py_code.io.plaintext.plnm import PlnM
 
 
 @dataclass
@@ -55,3 +57,22 @@ class BaseFile:
             asset = LociAsset.from_url(ret)
             img = asset.medium_res_image
             return img
+
+    @property
+    def plnm(self) -> PlnM:
+        """Return plaintext data from file"""
+        raise NotImplementedError()
+
+    def insert_plnm(self, plnm: PlnM) -> None:
+        """Insert plaintext data in file
+        assumes the plaintext data came from the same file"""
+        raise NotImplementedError()
+
+    def embed_aad(self, aad: np.ndarray) -> None:
+        """Embed aad data in file for retrieval during decryption"""
+        raise NotImplementedError()
+
+    @property
+    def aad(self) -> np.ndarray:
+        """Retrieve embedded aad data"""
+        raise NotImplementedError()

@@ -9,13 +9,12 @@ from pydantic import model_validator
 @dataclass
 class OffData:
     verts: np.ndarray
-    faces: np.ndarray
+    faces: list[list[int]]
     colors: np.ndarray
 
     @model_validator(mode="before")
     def validate_fields(self):
         assert Composition.VERTS == self.verts
-        assert Composition.FACES == self.faces
         assert (
             (Composition.RGB == self.colors)
             or (Composition.RGBA == self.colors)

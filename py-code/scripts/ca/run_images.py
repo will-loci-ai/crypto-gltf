@@ -1,6 +1,6 @@
 from PIL import Image
 from py_code.encrypt.deprecit.ca.base import CACipherParams
-from py_code.encrypt.deprecit.ca.system import CACipherSystem
+from py_code.encrypt.deprecit.ca.system import CACryptoSystem
 from py_code.io.plaintext.plnm import PlnM
 from py_code.local_tests.local_paths import image_paths
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     meshes_cipher_params = CACipherParams(gens=3, ps=[])
     images_cipher_params = CACipherParams(gens=3, ps=[])
 
-    encryption = CACipherSystem.from_pre_encryption(
+    encryption = CACryptoSystem.from_pre_encryption(
         plnm=plnm,
         meshes_cipher_params=meshes_cipher_params,
         images_cipher_params=images_cipher_params,

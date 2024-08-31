@@ -1,5 +1,5 @@
-class AdaptiveBaseModel:
-    """Base model for adaptive encryption/decryption model"""
+from py_code.encrypt.base import BaseCryptoSystem
 
-    def __new__(cls, *args, **kwargs):
-        raise RuntimeError(f"{cls} should not be instantiated")
+
+class AdaptiveBaseModel(BaseCryptoSystem):
+    """Base model for adaptive encryption/decryption model"""

@@ -11,8 +11,9 @@ from py_code.io.plaintext.plnm import PlnM
 from pydantic import BaseModel, ConfigDict
 
 
-class CACipherSystem(BaseModel):
+class CACryptoSystem(BaseModel):
     """Conways game of life cellular automata cipher system"""
+    AAD: bool = False
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
     plnm: PlnM  # Data
@@ -32,7 +33,7 @@ class CACipherSystem(BaseModel):
         meshes_cipher_params: CACipherParams,
         images_cipher_params: CACipherParams,
         random_seed: int = 0,
-    ) -> CACipherSystem:
+    ) -> CACryptoSystem:
         """Initialise class using pre-encryption steps"""
         if random_seed:
             logger.info(f"Setting random seed = {random_seed}")
@@ -42,10 +43,10 @@ class CACipherSystem(BaseModel):
         images_cipher_params.validate_idl_points(plnm.images_dim)
 
         meshes_expHCA = ExpConwaysHCA(
-            dimension=CACipherSystem.get_expHCA_dimension(plnm.meshes)
+            dimension=CACryptoSystem.get_expHCA_dimension(plnm.meshes)
         )
         images_expHCA = ExpConwaysHCA(
-            dimension=CACipherSystem.get_expHCA_dimension(plnm.images)
+            dimension=CACryptoSystem.get_expHCA_dimension(plnm.images)
         )
 
         return cls(

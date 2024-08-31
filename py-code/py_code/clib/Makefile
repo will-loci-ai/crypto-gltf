@@ -4,6 +4,7 @@ LDFLAGS = -lm
   
 all:
 		@echo "** Compiling code **"
+		rm -f *.so
 		gcc -c *.c -I/sw/include
 		gcc *o -o run -L/sw/lib -lm 
 		
@@ -19,7 +20,6 @@ leaks:
 		valgrind --leak-check=yes ./run $(CFLAGS) $(LDFLAGS)
 		@echo "\n"
 
-
 compile:
 		@echo "** Compiling code **"
 		gcc -c *.c -I/sw/include
@@ -32,5 +32,13 @@ run:
 clean: 
 		@echo "** Cleaning object files **"
 		rm -f *.o
+		rm -f *.so
 		rm -f run
 
+build: 
+		@echo "** Building .so library **"
+		rm -f *.o
+		rm -f *.so
+		rm -f run
+
+		cc -fPIC -shared -o clib.so *.c

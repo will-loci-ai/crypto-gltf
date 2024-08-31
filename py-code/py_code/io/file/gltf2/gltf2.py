@@ -3,12 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from time import time
 
+import numpy as np
 from loguru import logger
+from PIL import Image
 from py_code.data.asset_file_data_types import AssetFileDataType, Gltf2Data
+from py_code.data.types import Composition
 from py_code.io.file.base_file import BaseFile
 from py_code.io.file.gltf2.exp.gltf2_exporter import GlTF2Exporter
 from py_code.io.file.gltf2.imp.gltf2_imp_binary_data import BinaryData as ImpBinaryData
 from py_code.io.file.gltf2.imp.gltf2_importer import GlTF2Importer
+from py_code.io.plaintext.plnm import PlnM
 
 
 @dataclass
@@ -43,7 +47,7 @@ class GLTFFile(BaseFile):
             is_glb=is_glb,
         )
 
-        logger.info(f"{filename_ext[1:]} import took {time()-tic} seconds")
+        logger.debug(f"{filename_ext[1:]} import took {time()-tic} seconds")
         return cls(data=data, import_path=import_path, filename_ext=filename_ext)
 
     def save(self, export_dir: str) -> str:
@@ -58,6 +62,54 @@ class GLTFFile(BaseFile):
         )
         export_filepath = gltf_exporter.export(self.data)
 
-        logger.info(f"{self.filename_ext[1:]} export took {time()-tic} seconds")
+        logger.debug(f"{self.filename_ext[1:]} export took {time()-tic} seconds")
 
         return export_filepath
+
+    @property
+    def plnm(self) -> PlnM:
+        """'Get plaintext data from GLTFFile"""
+        accessors = [accessor for accessor in self.data.accessors.values()]
+        images = [np.asarray(image) for image in self.data.images.values()]
+        return PlnM(
+            meshes=accessors,
+            images=images,
+            meshes_dim=len(accessors),
+            images_dim=len(images),
+        )
+
+    def insert_plnm(self, plnm: PlnM) -> None:
+        """Insert plaintext in GLTFFile
+        assumes the plaintext data came from the same GLTFFile"""
+
+        self.data.accessors = {idx: mesh for idx, mesh in enumerate(plnm.meshes)}
+        self.data.images = {
+            idx: Image.fromarray(image) for idx, image in enumerate(plnm.images)
+        }
+
+    def embed_aad(self, aad: np.ndarray) -> None:
+        """Embed aad data in file for retrieval during decryption"""
+
+        assert Composition.AAD == aad
+        num_accessors = len(self.data.accessors)
+        self.data.accessors[num_accessors] = aad
+        self.data.gltf["accessors"].append(
+            {
+                "bufferView": num_accessors,
+                "byteOffset": 0,
+                "componentType": 5125,
+                "count": len(aad),
+                "type": "VEC3",
+            }
+        )
+
+    @property
+    def aad(self) -> np.ndarray:
+        """Retrieve embedded aad data"""
+        aad_idx = len(self.data.accessors) - 1
+        aad = self.data.accessors[aad_idx]
+
+        # remove embedded aad
+        self.data.gltf["accessors"] = self.data.gltf["accessors"][:aad_idx]
+        self.data.accessors.pop(aad_idx)
+        return aad

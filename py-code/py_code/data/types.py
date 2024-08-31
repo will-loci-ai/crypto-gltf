@@ -7,7 +7,7 @@ import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 JSONDict = dict[str, Any]
-from typing import Generic, TypeVar
+from typing import Generic, Type, TypeVar
 
 # FILETYPES
 
@@ -79,6 +79,8 @@ class Composition:
 
     P = ArrayComposition3D(dim=2, axis_restrictions={}, dtype=np.uint8)
 
+    AAD = ArrayComposition3D(dim=2, axis_restrictions={1: 3}, dtype=np.uint32)
+
 
 DataTypeName = Literal[None, "GREYSCALE", "RGB", "MESH", "RGBA", "P"]
 
@@ -126,10 +128,27 @@ class CombinedPlnMDataTypes:
 # RESPONSE TYPES
 
 T = TypeVar("T")
+A = TypeVar("A")
+K = TypeVar("K")
 
-class EncryptionResponse(BaseModel, Generic[T]):
+
+class EncryptionResponse(BaseModel, Generic[T, A, K]):
     """Generic response model for encryption model or system"""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
     ciphertext: T
-    aad: bytes
+    aad: A
+    key: K
+
+
+# ENCRYPTION BASE TYPES
+
+
+@dataclass
+class BaseParams:
+    """Base class for encryption model parameters"""
+
+
+@dataclass
+class BaseKey:
+    """Base class for encryption model keys"""

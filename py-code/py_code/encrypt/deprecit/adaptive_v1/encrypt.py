@@ -7,6 +7,7 @@ from loguru import logger
 from py_code.data.types import EncryptionResponse
 from py_code.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_encrypt
 from py_code.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
+from py_code.encrypt.deprecit.adaptive_v1.types import Key
 from py_code.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
 
 
@@ -14,11 +15,12 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
     @staticmethod
     def _encrypt(
-        data: list[np.ndarray], key: bytes, position: Literal[0, 1, 2, 3]
-    ) -> EncryptionResponse[list[np.ndarray]]:
+        data: list[np.ndarray], key: Key, position: Literal[0, 1, 2, 3]
+    ) -> EncryptionResponse[list[np.ndarray], np.ndarray, Key]:
 
         tic = time()
         shapes = [arr.shape for arr in data]
+        assert key.key is not None
 
         buffer = bytearray(b"")
         for arr in data:
@@ -26,7 +28,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
         toc = time() - tic
 
-        response = aes_gcm_encrypt(message=buffer, key=key)
+        response = aes_gcm_encrypt(message=buffer, key=key.key)
 
         tic = time()
 
@@ -45,10 +47,19 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         if not offset == sum([arr.size for arr in data]):
             raise Exception(f"Entire cipher text has not been used")
 
+        single_aad_arr = np.frombuffer(response.aad, dtype=np.uint32)
+        aad_arr = np.column_stack(
+            (
+                np.frombuffer(response.aad, dtype=np.uint32),
+                np.zeros((len(single_aad_arr)), dtype=np.uint32),
+                np.zeros((len(single_aad_arr)), dtype=np.uint32),
+            )
+        ) # convert to arr so we can embed in file
+
         logger.info(
             f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
         )
 
-        return EncryptionResponse[list[np.ndarray]](
-            ciphertext=encrypted_data, aad=response.aad
+        return EncryptionResponse[list[np.ndarray], np.ndarray, Key](
+            ciphertext=encrypted_data, aad=aad_arr, key=key
         )

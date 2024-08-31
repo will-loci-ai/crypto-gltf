@@ -5,6 +5,7 @@ import numpy as np
 from loguru import logger
 from py_code.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_decrypt
 from py_code.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
+from py_code.encrypt.deprecit.adaptive_v1.types import Key
 from py_code.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
 
 
@@ -13,9 +14,9 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
     @staticmethod
     def _decrypt(
         data: list[np.ndarray],
-        key: bytes,
+        key: Key,
         position: Literal[0, 1, 2, 3],
-        aad_b64: bytes,
+        aad: bytes,
     ) -> list[np.ndarray]:
         tic = time()
 
@@ -27,7 +28,9 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
 
         toc = time() - tic
 
-        decrypted_buffer = aes_gcm_decrypt(ciphertext=buffer, aad_b64=aad_b64, key=key)
+        decrypted_buffer = aes_gcm_decrypt(
+            ciphertext=buffer, aad_b64=aad, key=key.key
+        )
 
         tic = time()
 

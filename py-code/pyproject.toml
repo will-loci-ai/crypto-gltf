@@ -24,6 +24,7 @@ mypy = "^1.11.1"
 omegaconf = "^2.3.0"
 cryptograpy = "^0.0.0"
 bitstring = "^4.2.3"
+pytest = "^8.3.2"
 
 
 [build-system]

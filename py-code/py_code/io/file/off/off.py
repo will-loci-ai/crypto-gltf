@@ -6,8 +6,9 @@ from dataclasses import dataclass
 import numpy as np
 from loguru import logger
 from py_code.data.asset_file_data_types import AssetFileDataType, OffData
-from py_code.data.types import CombinedPlnMDataTypes
+from py_code.data.types import Composition
 from py_code.io.file.base_file import BaseFile
+from py_code.io.plaintext.plnm import PlnM
 
 
 @dataclass
@@ -82,7 +83,9 @@ class OffFile(BaseFile):
         return cls(
             import_path=import_path,
             data=OffData(
-                verts=np.array(verts), faces=np.array(faces), colors=np.array(colors)
+                verts=np.array(verts, dtype=np.float32),
+                faces=faces,
+                colors=np.array(colors, dtype=np.float32),
             ),
             filename_ext=".off",
         )
@@ -101,7 +104,7 @@ class OffFile(BaseFile):
         export_dir_bin = os.fsencode(export_filepath)
         fp = open(export_dir_bin, "w")
 
-        if colors:
+        if colors.size > 0:
             fp.write("COFF\n")
         else:
             fp.write("OFF\n")
@@ -109,8 +112,8 @@ class OffFile(BaseFile):
         fp.write("%d %d 0\n" % (len(verts), len(faces)))
 
         for i, vert in enumerate(verts):
-            fp.write(f"{vert[0]:.16f} {vert[1]:.16f} {vert[2]:.16f}")
-            if colors:
+            fp.write(f"{vert[0]:.32} {vert[1]:.32} {vert[2]:.32}")
+            if colors.size > 0:
                 fp.write(f" {colors[i][0]:d} {colors[i][1]:d} {colors[i][2]:d} 255")
             fp.write("\n")
 
@@ -126,3 +129,40 @@ class OffFile(BaseFile):
         logger.info(f".off file saved to {export_filepath}")
 
         return export_filepath
+
+    @property
+    def plnm(self) -> PlnM:
+        """'Get plaintext from OffFile"""
+
+        verts, colors = (
+            self.data.verts,
+            self.data.colors,
+        )  # skip faces as they're of inhomogeneous shape
+        return PlnM(meshes=[verts, colors], images=[], meshes_dim=2, images_dim=0)
+
+    def insert_plnm(self, plnm: PlnM) -> None:
+        """Insert plaintext in OffFile
+        assumes the plaintext data came from the same OffFile"""
+
+        self.data.verts = plnm.meshes[0]
+        self.data.colors = plnm.meshes[1]
+
+    def embed_aad(self, aad: np.ndarray) -> None:
+        """Embed aad data in file for retrieval during decryption"""
+
+        assert Composition.AAD == aad
+        num_used_vertices = max(max(x) for x in self.data.faces) + 1
+        aad_float32 = np.frombuffer(aad.tobytes(), dtype=np.float32).reshape((-1, 3))
+        self.data.verts = np.concatenate(
+            (self.data.verts[:num_used_vertices], aad_float32)
+        )
+
+    @property
+    def aad(self) -> np.ndarray:
+        """Retrieve embedded aad data"""
+        num_used_vertices = max(max(x) for x in self.data.faces) + 1
+        aad = self.data.verts[num_used_vertices:]
+        self.data.verts = self.data.verts[
+            :num_used_vertices
+        ]  # remove embedded aad data
+        return np.frombuffer(aad.tobytes(), dtype=np.uint32).reshape((-1, 3))
