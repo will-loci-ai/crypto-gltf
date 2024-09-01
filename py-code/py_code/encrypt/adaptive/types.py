@@ -11,14 +11,12 @@ from py_code.encrypt.adaptive.utils import buffer_length
 from pydantic import BaseModel, model_validator
 
 
-@dataclass
+
 class Key(BaseKey):
-    k1: bytes | None = None
-    k2: bytes | None = None
-    k3: bytes | None = None
 
     @model_validator(mode="before")
-    def validate_fields(self, data: Any):
+    @classmethod
+    def validate_fields(cls, data: Any):
         k1, k2, k3 = data.get("k1"), data.get("k2"), data.get("k3")
         assert k1 or k2 or k3  # at least one key must be provided
         return data
@@ -63,15 +61,92 @@ class BlockSelection(BaseModel):
             return "r"
 
 
-@dataclass
 class AdaptiveCipherParams(BaseParams):
     p: int
     q: int
     r: int
 
+    @cached_property
+    def pstart(self) -> int:
+        raise NotImplementedError()
+
+    @cached_property
+    def pstop(self) -> int:
+        raise NotImplementedError()
+
+    @cached_property
+    def qstart(self) -> int:
+        raise NotImplementedError()
+
+    @cached_property
+    def qstop(self) -> int:
+        raise NotImplementedError()
+
+    @cached_property
+    def rstart(self) -> int:
+        raise NotImplementedError()
+
+    @cached_property
+    def rstop(self) -> int:
+        raise NotImplementedError()
+
+    def start(self, block: Literal["p", "q", "r"]) -> int:
+        MAPPING = {"p": "pstart", "q": "qstart", "r": "rstart"}
+        return self.__getattribute__(MAPPING[block])
+
+    def stop(self, block: Literal["p", "q", "r"]) -> int:
+        MAPPING = {"p": "pstop", "q": "qstop", "r": "rstop"}
+        return self.__getattribute__(MAPPING[block])
+
+    def selection(self, selection: BlockSelection) -> dict:
+        """'Returns selected params"""
+        return {k: self.__getattribute__(k) for k, v in selection.__dict__.items() if v}
+
+
+class ImagesAdaptiveCipherParams(AdaptiveCipherParams):
+
     @model_validator(mode="before")
-    def validate_fields(self, data: Any):
-        p, q, r = data.get("p"), data.get("q"), data("r")
+    @classmethod
+    def validate_fields(cls, data: Any):
+        p, q, r = data.get("p"), data.get("q"), data.get("r")
+        assert p and q and r  # all fields must be provided
+        assert p >= 1
+        assert q >= 1
+        assert r >= 1
+        assert p + q + r <= 8
+        return data
+
+    @cached_property
+    def pstart(self) -> int:
+        return self.qstart - self.p
+
+    @cached_property
+    def pstop(self) -> int:
+        return self.qstart
+
+    @cached_property
+    def qstart(self) -> int:
+        return self.qstop - self.q
+
+    @cached_property
+    def qstop(self) -> int:
+        return self.rstart
+
+    @cached_property
+    def rstart(self) -> int:
+        return 8 - self.r
+
+    @cached_property
+    def rstop(self) -> int:
+        return 8
+
+
+class MeshesAdaptiveCipherParams(AdaptiveCipherParams):
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_fields(cls, data: Any):
+        p, q, r = data.get("p"), data.get("q"), data.get("r")
         assert p and q and r  # all fields must be provided
         assert p >= 1
         assert q >= 1
@@ -103,49 +178,42 @@ class AdaptiveCipherParams(BaseParams):
     def rstop(self) -> int:
         return self.rstart + self.r
 
-    def start(self, block: Literal["p", "q", "r"]) -> int:
-        MAPPING = {"p": "pstart", "q": "qstart", "r": "rstart"}
-        return self.__getattribute__(MAPPING[block])
-
-    def stop(self, block: Literal["p", "q", "r"]) -> int:
-        MAPPING = {"p": "pstop", "q": "qstop", "r": "rstop"}
-        return self.__getattribute__(MAPPING[block])
-
-    def selection(self, selection: BlockSelection) -> dict:
-        """'Returns selected params"""
-        return {k: self.__getattribute__(k) for k, v in selection.__dict__.items() if v}
-
 
 class BufferView(BaseModel):
+
+    params: AdaptiveCipherParams
     rows: int
     cols: int
-    params: AdaptiveCipherParams
+    slices: int = 1
 
     @classmethod
     def from_shape(
-        cls, shape: tuple[int, int], params: AdaptiveCipherParams
+        cls, shape: tuple[int, int] | tuple[int, int, int], params: AdaptiveCipherParams
     ) -> BufferView:
-        return cls(rows=shape[0], cols=shape[1], params=params)
+        if len(shape) == 2:
+            return cls(rows=shape[0], cols=shape[1], params=params)
+        elif len(shape) == 3:
+            return cls(rows=shape[0], cols=shape[1], slices=shape[2], params=params)
 
     @cached_property
     def pbufflen(self) -> int:
         """p uint32 buffer length required"""
         return buffer_length(
-            self.params.pstart, self.params.pstop, self.rows, self.cols
+            self.params.pstart, self.params.pstop, self.rows, self.cols, self.slices
         )
 
     @cached_property
     def qbufflen(self) -> int:
         """q uint32 buffer length required"""
         return buffer_length(
-            self.params.qstart, self.params.qstop, self.rows, self.cols
+            self.params.qstart, self.params.qstop, self.rows, self.cols, self.slices
         )
 
     @cached_property
     def rbufflen(self) -> int:
         """r uint32 buffer length required"""
         return buffer_length(
-            self.params.rstart, self.params.rstop, self.rows, self.cols
+            self.params.rstart, self.params.rstop, self.rows, self.cols, self.slices
         )
 
     @property

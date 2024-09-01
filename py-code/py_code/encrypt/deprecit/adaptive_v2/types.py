@@ -8,7 +8,6 @@ from py_code.data.types import BaseKey, BaseParams
 from pydantic import BaseModel, model_validator
 
 
-@dataclass
 class AdaptiveCipherParamsV2(BaseParams):
     # p, q, r here represents the byte to be taken from the float32
     p: int
@@ -16,9 +15,12 @@ class AdaptiveCipherParamsV2(BaseParams):
     r: int
 
     @model_validator(mode="before")
-    def validate_fields(self, data: Any):
-        p, q, r = data.get("p"), data.get("q"), data("r")
-        assert p and q and r  # all fields must be provided
+    @classmethod
+    def validate_fields(cls, data: Any):
+        p, q, r = data.get("p"), data.get("q"), data.get("r")
+        assert (
+            (p is not None) and (q is not None) and (r is not None)
+        )  # all fields must be provided
         assert (
             3 >= p > q > r >= 0
         )  # r must be least significant byte of the 3, p the most significant
@@ -32,15 +34,17 @@ class SBlocks(BaseModel):
     s3: bytes
 
 
-@dataclass
 class Key(BaseKey):
     k1: bytes | None = None
     k2: bytes | None = None
     k3: bytes | None = None
 
     @model_validator(mode="before")
-    def validate_fields(self):
-        assert self.k1 or self.k2 or self.k3
+    @classmethod
+    def validate_fields(cls, data: Any):
+        k1, k2, k3 = data.get("k1"), data.get("k2"), data.get("k3")
+        assert k1 or k2 or k3
+        return data
 
     def __str__(self) -> str:
         return str({k: b64e(v) for k, v in self.__dict__.items() if v is not None})

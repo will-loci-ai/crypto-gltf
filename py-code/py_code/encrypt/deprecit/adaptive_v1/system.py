@@ -35,8 +35,8 @@ class AdaptiveCryptoSystemV1(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
             plnm.meshes[i].astype(np.float32) for i in meshes_float_arrs_idxs
         ]  # convert to float32
 
-        if key is None or key.key is None:
-            key = Key(key=secrets.token_bytes(32))
+        if key is None or key.k1 is None:
+            key = Key(k1=secrets.token_bytes(32))
 
         encryption_response = AdaptiveEncryptionModel._encrypt(
             data=float_arrs, key=key, position=meshes_cipher_params.position
@@ -58,7 +58,6 @@ class AdaptiveCryptoSystemV1(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         images_cipher_params: AdaptiveCipherParamsV1,
         key: Key,
         aad: bytes,
-
     ) -> PlnM:
         tic = time()
         # Get non-integer type arrays

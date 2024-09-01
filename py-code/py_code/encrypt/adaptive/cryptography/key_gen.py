@@ -12,7 +12,6 @@ from py_code.encrypt.adaptive.types import (
     Key,
 )
 from py_code.encrypt.adaptive.utils import get_bits
-from py_code.io.plaintext.plnm import PlnM
 
 
 def aes_sha(sblock: bytes, ki: bytes) -> bytes:
@@ -31,13 +30,13 @@ def aes_sha(sblock: bytes, ki: bytes) -> bytes:
     return digest.finalize()
 
 
-def get_source_arrays(float_arrs: list[np.ndarray], min_size: int) -> list[np.ndarray]:
-    """Return first n matrices in float_arrs such that the sum of matrix sizes is greater than min_size.
+def get_source_arrays(plnm_arrs: list[np.ndarray], min_size: int) -> list[np.ndarray]:
+    """Return first n matrices in plnm_arrs such that the sum of matrix sizes is greater than min_size.
     256 = AES keylength"""
 
     source_arrays: list[np.ndarray] = []
 
-    for arr in float_arrs:
+    for arr in plnm_arrs:
         source_arrays.append(arr)
         size = sum([arr.size for arr in source_arrays])
         if size > min_size:
@@ -58,7 +57,7 @@ def get_min_size_plaintext(
 
 
 def generate_keys(
-    float_arrs: list[np.ndarray], params: AdaptiveCipherParams, k3: bytes | None = None
+    plnm_arrs: list[np.ndarray], params: AdaptiveCipherParams, k3: bytes | None = None
 ) -> Key:
     """Calculates k1, k2 and k3 for a given plaintext asset"""
 
@@ -66,7 +65,7 @@ def generate_keys(
         params=params, selection=BlockSelection(q=True, r=True)
     )
     source_arrays = get_source_arrays(
-        float_arrs=float_arrs,
+        plnm_arrs=plnm_arrs,
         min_size=min_size,
     )
 
@@ -80,8 +79,8 @@ def generate_keys(
             buffer_view.q_buffer,
             buffer_view.r_buffer,
         )
-        get_bits(arr, q_buffer, arr.shape, params.qstart, params.qstop)
-        get_bits(arr, r_buffer, arr.shape, params.rstart, params.rstop)
+        get_bits(arr, q_buffer, params.qstart, params.qstop)
+        get_bits(arr, r_buffer, params.rstart, params.rstop)
 
         s2.extend(q_buffer.tobytes())
         s3.extend(r_buffer.tobytes())
@@ -102,7 +101,7 @@ def generate_keys(
 
 
 def get_subkey(
-    float_arrs: list[np.ndarray],
+    plnm_arrs: list[np.ndarray],
     params: AdaptiveCipherParams,
     ki: bytes,
     selection: BlockSelection,
@@ -110,7 +109,7 @@ def get_subkey(
     """Calculate ki-1 from ki for a given plaintext"""
 
     min_size = get_min_size_plaintext(params, selection)
-    source_arrays = get_source_arrays(float_arrs=float_arrs, min_size=min_size)
+    source_arrays = get_source_arrays(plnm_arrs=plnm_arrs, min_size=min_size)
 
     block = selection.single_block
     start = params.start(block)
@@ -120,7 +119,7 @@ def get_subkey(
     for arr in source_arrays:
         buffer_view = BufferView.from_shape(arr.shape, params=params)
         buffer = buffer_view.buffer(block)
-        get_bits(arr, buffer, arr.shape, start, stop)
+        get_bits(arr, buffer, start, stop)
         si.extend(buffer.tobytes())
 
     ki_minus_1 = aes_sha(sblock=si[:32], ki=ki)

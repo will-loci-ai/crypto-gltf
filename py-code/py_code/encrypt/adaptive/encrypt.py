@@ -34,7 +34,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             get_bits(
                 arr,
                 p_buffer,
-                arr.shape,
                 params.pstart,
                 params.pstop,
                 secrets.randbits(32),
@@ -42,7 +41,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             get_bits(
                 arr,
                 q_buffer,
-                arr.shape,
                 params.qstart,
                 params.qstop,
                 secrets.randbits(32),
@@ -50,7 +48,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             get_bits(
                 arr,
                 r_buffer,
-                arr.shape,
                 params.rstart,
                 params.rstop,
                 secrets.randbits(32),
@@ -88,23 +85,18 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             put_bits(
                 arr,
                 r1_arr[poffset : poffset + buffer_view.pbufflen],
-                arr.shape,
                 params.pstart,
                 params.pstop,
             )
-
             put_bits(
                 arr,
                 r2_arr[qoffset : qoffset + buffer_view.qbufflen],
-                arr.shape,
                 params.qstart,
                 params.qstop,
             )
-
             put_bits(
                 arr,
                 r3_arr[roffset : roffset + buffer_view.rbufflen],
-                arr.shape,
                 params.rstart,
                 params.rstop,
             )

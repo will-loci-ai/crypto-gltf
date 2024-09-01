@@ -3,12 +3,12 @@
 // TYPE DEFINITIONS
 typedef struct
 {
-    // array type
+    // 32 bit buffer type
     uint32_t *arr;
-    uint32_t size;
-    uint32_t idx;
-    uint32_t len;
-    uint32_t offset;
+    uint32_t size;   // number of 32 bit values in the buffer
+    uint32_t idx;    // buffer position
+    uint32_t len;    // length of all blocks added to buffer
+    uint32_t offset; // buffer position bit offset
 } Buffer;
 
 // CHECKS

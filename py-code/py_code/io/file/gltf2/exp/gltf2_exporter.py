@@ -139,9 +139,15 @@ class GlTF2Exporter:
 
         if uri is not None:
             # write to file
+            if not uri.endswith(".png"):
+                # .jpeg alters some RGB values on export
+                uri = os.path.splitext(uri)[0] + ".png"
+                gltf_data.gltf["images"][image_idx]["uri"] = uri
+
             path = os.path.join(self.export_dir, uri_to_path(uri))
             os.makedirs(os.path.dirname(path), exist_ok=True)
-            gltf_data.images[image_idx].save(path)
+            gltf_data.images[image_idx].save(path, compression_level=0)
+
         elif buffer_view is not None:
             # add to buffer
             binary_data = ExpBinaryData.from_image(image=gltf_data.images[image_idx])

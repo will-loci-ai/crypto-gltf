@@ -1,7 +1,7 @@
 from typing import ClassVar, Literal
 
 import numpy as np
-from py_code.data.types import BaseKey, BaseParams, EncryptionResponse
+from py_code.data.types import AAD_DICT, BaseKey, BaseParams, EncryptionResponse
 from py_code.io.plaintext.plnm import PlnM
 
 CRYPTO_SYSTEMS = Literal["AdaptiveV1", "AdaptiveV2", "AdaptiveV3", "CA"]
@@ -19,17 +19,17 @@ class BaseCryptoSystem:
     def encrypt(
         plnm: PlnM,
         meshes_cipher_params: BaseParams,
-        images_cipher_params: BaseParams,
+        images_cipher_params: BaseParams | None = None,
         key: BaseKey | None = None,
-    ) -> EncryptionResponse[PlnM, np.ndarray | None, BaseKey]:
+    ) -> EncryptionResponse[PlnM, AAD_DICT, BaseKey]:
         raise NotImplementedError()
 
     @staticmethod
     def decrypt(
         plnm: PlnM,
         meshes_cipher_params: BaseParams,
-        images_cipher_params: BaseParams,
         key: BaseKey,
-        aad: np.ndarray | None,
+        aad: AAD_DICT,
+        images_cipher_params: BaseParams | None = None,
     ) -> PlnM:
         raise NotImplementedError()

@@ -64,7 +64,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         if not offset == sum([arr.size for arr in data]):
             raise Exception(f"Entire cipher text has not been used")
         
-        print(np.frombuffer(r2.aad, dtype=np.uint32))
         aad_arr = np.column_stack(
             (
                 np.frombuffer(r1.aad, dtype=np.uint32),

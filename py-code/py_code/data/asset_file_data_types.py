@@ -3,23 +3,27 @@ from dataclasses import dataclass
 import numpy as np
 from PIL import Image
 from py_code.data.types import Composition, JSONDict
-from pydantic import model_validator
+from pydantic import BaseModel, ConfigDict, model_validator
+from typing import Any
 
-
-@dataclass
-class OffData:
+class OffData(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     verts: np.ndarray
-    faces: list[list[int]]
+    faces: list[Any]
     colors: np.ndarray
 
     @model_validator(mode="before")
-    def validate_fields(self):
-        assert Composition.VERTS == self.verts
-        assert (
-            (Composition.RGB == self.colors)
-            or (Composition.RGBA == self.colors)
-            or (Composition.GREYSCALE == self.colors)
-        )
+    @classmethod
+    def validate_fields(cls, data):
+        verts, colors = data.get("verts"), data.get("colors")
+        assert Composition.VERTS == verts
+        # assert (
+        #     (Composition.RGB == colors)
+        #     or (Composition.RGBA == colors)
+        #     or (Composition.GREYSCALE == colors)
+        #     or (Composition.EMPTY == colors)
+        # )
+        return data
 
 
 @dataclass

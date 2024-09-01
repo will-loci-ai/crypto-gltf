@@ -72,6 +72,21 @@ void print_uint32_arr_b(size_t const rows, size_t const cols, uint32_t const *ar
     printf("\n");
 }
 
+void print_uint8_arr_b(size_t const rows, size_t const cols, uint8_t const *arr)
+{
+    // print uint8_t array in binary form
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            print_b(1, &arr[i * cols + j]);
+            printf("    ");
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
 
 void print_buffer(Buffer *buffer)
 {

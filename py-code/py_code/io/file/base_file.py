@@ -9,14 +9,15 @@ from typing import Any
 import numpy as np
 from loci_asset.asset import LociAsset
 from py_code.data.asset_file_data_types import AssetFileDataType
-from py_code.data.types import Extension
+from py_code.data.types import AAD_DICT, Extension
 from py_code.io.plaintext.plnm import PlnM
+from pydantic import BaseModel, ConfigDict
 
 
-@dataclass
-class BaseFile:
+class BaseFile(BaseModel):
     """Base class for 3D asset file types"""
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     import_path: str
     filename_ext: Extension.ASSET
     data: AssetFileDataType
@@ -68,11 +69,11 @@ class BaseFile:
         assumes the plaintext data came from the same file"""
         raise NotImplementedError()
 
-    def embed_aad(self, aad: np.ndarray) -> None:
+    def embed_aad(self, aad: AAD_DICT) -> None:
         """Embed aad data in file for retrieval during decryption"""
         raise NotImplementedError()
 
     @property
-    def aad(self) -> np.ndarray:
+    def aad(self) -> AAD_DICT:
         """Retrieve embedded aad data"""
         raise NotImplementedError()

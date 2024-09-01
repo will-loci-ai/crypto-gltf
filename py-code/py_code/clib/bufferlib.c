@@ -67,7 +67,7 @@ void fill_buffer(Buffer *buffer, uint32_t fill)
     else
     {
         assertmsg((buffer->idx + 1 == buffer->size), "Error: end of buffer not reached during fill_buffer().");
-        buffer->arr[buffer->idx] |= fill >> buffer->offset;  // here len is 32
+        buffer->arr[buffer->idx] |= fill >> buffer->offset; // here len is 32
     }
 }
 
@@ -81,15 +81,15 @@ uint32_t next_block(Buffer *buffer)
         assertmsg(buffer->idx < buffer->size, "Error: end of buffer reached.");
 
         uint32_t remainder = buffer->len + buffer->offset - 32;
-        block = slice(buffer->arr[buffer->idx], buffer->offset, 32) << remainder;
-        block += slice(buffer->arr[buffer->idx + 1], 0, remainder);
+        block = slice32(buffer->arr[buffer->idx], buffer->offset, 32) << remainder;
+        block += slice32(buffer->arr[buffer->idx + 1], 0, remainder);
         buffer->offset = remainder;
         buffer->idx++;
     }
     else
     {
         // all block bits lie in idx
-        block = slice(buffer->arr[buffer->idx], buffer->offset, buffer->offset + buffer->len);
+        block = slice32(buffer->arr[buffer->idx], buffer->offset, buffer->offset + buffer->len);
         buffer->offset += buffer->len;
         if (buffer->offset == 32)
         {

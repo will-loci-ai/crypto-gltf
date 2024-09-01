@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Type
+from typing import Literal, Type
 
 import numpy as np
-from py_code.data.types import BaseKey, BaseParams, EncryptionResponse
+from py_code.data.types import AAD_DICT, BaseKey, BaseParams, EncryptionResponse
 from py_code.encrypt.adaptive.system import AdaptiveCryptoSystemV3
 from py_code.encrypt.base import CRYPTO_SYSTEMS, BaseCryptoSystem
 from py_code.encrypt.deprecit.adaptive_v1.system import AdaptiveCryptoSystemV1
@@ -36,7 +36,7 @@ class Asset:
         images_cipher_params: BaseParams,
         key: BaseKey | None = None,
         encryptor: CRYPTO_SYSTEMS = "AdaptiveV3",
-    ) -> EncryptionResponse[PlnM, np.ndarray | None, BaseKey]:
+    ) -> EncryptionResponse[PlnM, AAD_DICT, BaseKey]:
         """Encrypt a file"""
         encrypt_localizer: dict[CRYPTO_SYSTEMS, Type[BaseCryptoSystem]] = {
             "AdaptiveV1": AdaptiveCryptoSystemV1,
@@ -73,7 +73,7 @@ class Asset:
         if SYSTEM.AAD:
             aad = self.file.aad
         else:
-            aad = None
+            aad = {}
 
         plnm = SYSTEM.decrypt(
             self.file.plnm,

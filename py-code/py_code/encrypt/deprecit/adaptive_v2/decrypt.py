@@ -47,7 +47,6 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
             )
         if selection.q:
             assert key.k2  # check key exists
-            print(aad[:, 1])
             s2 = aes_gcm_decrypt(
                 ciphertext=combined_sblocks.s2, aad_b64=aad[:, 1].tobytes(), key=key.k2
             )

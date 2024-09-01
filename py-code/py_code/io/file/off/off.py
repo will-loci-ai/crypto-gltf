@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
 
 import numpy as np
 from loguru import logger
 from py_code.data.asset_file_data_types import AssetFileDataType, OffData
-from py_code.data.types import Composition
+from py_code.data.types import Composition, AAD_DICT
 from py_code.io.file.base_file import BaseFile
 from py_code.io.plaintext.plnm import PlnM
 
 
-@dataclass
 class OffFile(BaseFile):
     data: AssetFileDataType.OFF
 

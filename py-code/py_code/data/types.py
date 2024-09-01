@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Literal, NamedTuple
+from typing import Any, Generic, Literal, NamedTuple, Type, TypeVar
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 JSONDict = dict[str, Any]
-from typing import Generic, Type, TypeVar
 
 # FILETYPES
 
@@ -49,7 +48,8 @@ class ArrayComposition3D:
         res = len(shape) == self.dim
         for k in self.axis_restrictions.keys():
             res = res and shape[k] == self.axis_restrictions[k]
-        res = res and dtype == self.dtype
+        if self.dtype is not None:
+            res = res and dtype == self.dtype
         return res
 
     @classmethod
@@ -65,7 +65,9 @@ class Composition:
 
     FACES = ArrayComposition3D(dim=1, axis_restrictions={}, dtype=int)  # (n, 3)
 
-    VERTS = ArrayComposition3D(dim=2, axis_restrictions={1: 3})  # (n, 3)
+    VERTS = ArrayComposition3D(
+        dim=2, axis_restrictions={1: 3}, dtype=np.float32
+    )  # (n, 3)
 
     RGB = ArrayComposition3D(
         dim=3, axis_restrictions={2: 3}, dtype=np.uint8
@@ -80,6 +82,8 @@ class Composition:
     P = ArrayComposition3D(dim=2, axis_restrictions={}, dtype=np.uint8)
 
     AAD = ArrayComposition3D(dim=2, axis_restrictions={1: 3}, dtype=np.uint32)
+
+    EMPTY = ArrayComposition3D(dim=1, axis_restrictions={0: 0})
 
 
 DataTypeName = Literal[None, "GREYSCALE", "RGB", "MESH", "RGBA", "P"]
@@ -141,14 +145,18 @@ class EncryptionResponse(BaseModel, Generic[T, A, K]):
     key: K
 
 
+AAD_DICT = dict[Literal["meshes", "images"], np.ndarray]
+
 # ENCRYPTION BASE TYPES
 
 
-@dataclass
-class BaseParams:
+class BaseParams(BaseModel):
     """Base class for encryption model parameters"""
 
 
-@dataclass
-class BaseKey:
+class BaseKey(BaseModel):
     """Base class for encryption model keys"""
+
+    k1: bytes | None = None
+    k2: bytes | None = None
+    k3: bytes | None = None

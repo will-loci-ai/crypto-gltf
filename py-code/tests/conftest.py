@@ -14,6 +14,7 @@ ASSET_PATHS = [
 # CRYPTO_SYSTEMS = Literal["AdaptiveV1", "AdaptiveV2", "AdaptiveV3", "CA"]
 CRYPTO_SYSTEMS = [
     "AdaptiveV1",
+    "AdaptiveV2",
     "AdaptiveV3",
 ]
 
@@ -21,7 +22,7 @@ CRYPTO_SYSTEMS = [
 @pytest.fixture(scope="session", params=ASSET_PATHS, ids=lambda p: p.name)
 def asset_path(request) -> str:
     """Return each available asset path."""
-    return request.param
+    return str(request.param)
 
 
 @pytest.fixture(scope="function")

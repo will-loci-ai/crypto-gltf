@@ -20,7 +20,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
         tic = time()
         shapes = [arr.shape for arr in data]
-        assert key.key is not None
+        assert key.k1 is not None
 
         buffer = bytearray(b"")
         for arr in data:
@@ -28,7 +28,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
         toc = time() - tic
 
-        response = aes_gcm_encrypt(message=buffer, key=key.key)
+        response = aes_gcm_encrypt(message=buffer, key=key.k1)
 
         tic = time()
 

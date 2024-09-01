@@ -54,7 +54,7 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
         for idx, arr in enumerate(data):
             buffer_view = BufferView.from_shape(shape=arr.shape, params=params)
             buffer = buffer_view.buffer(block=block)
-            get_bits(arr, buffer, arr.shape, start, stop)
+            get_bits(arr, buffer, start, stop)
             buffer[-1] = padding_arr[idx]
             combined_sblocks.extend(buffer.tobytes())
 
@@ -69,13 +69,12 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
         decrypted_data_arr = np.frombuffer(decrypted_data, dtype=np.uint32)
 
         offset = 0
-        for arr in data: 
+        for arr in data:
             buffer_view = BufferView.from_shape(shape=arr.shape, params=params)
 
             put_bits(
                 arr,
                 decrypted_data_arr[offset : offset + buffer_view.bufflen(block=block)],
-                arr.shape,
                 start,
                 stop,
             )
