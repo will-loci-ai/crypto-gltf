@@ -5,21 +5,19 @@ from time import time
 import numpy as np
 from loguru import logger
 from PIL import Image
-from gltf_crypto_conan1014.data.asset_file_data_types import AssetFileDataType, Gltf2Data
-from gltf_crypto_conan1014.data.types import AAD_DATA, Composition, PlnMDataType
-from gltf_crypto_conan1014.encrypt.adaptive.types import (
-    ImagesAdaptiveCipherParams,
-    MeshesAdaptiveCipherParams,
+from src.crypto_gltf.data.asset_file_data_types import Gltf2Data
+from src.crypto_gltf.data.types import AAD_DATA, Composition
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.file.gltf2.exp.gltf2_exporter import GlTF2Exporter
+from src.crypto_gltf.io.file.gltf2.imp.gltf2_imp_binary_data import (
+    BinaryData as ImpBinaryData,
 )
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.file.gltf2.exp.gltf2_exporter import GlTF2Exporter
-from gltf_crypto_conan1014.io.file.gltf2.imp.gltf2_imp_binary_data import BinaryData as ImpBinaryData
-from gltf_crypto_conan1014.io.file.gltf2.imp.gltf2_importer import GlTF2Importer
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.io.file.gltf2.imp.gltf2_importer import GlTF2Importer
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class GLTFFile(BaseFile):
-    data: AssetFileDataType.GLTF2
+    data: Gltf2Data
 
     @classmethod
     def load(cls, import_path: str) -> GLTFFile:

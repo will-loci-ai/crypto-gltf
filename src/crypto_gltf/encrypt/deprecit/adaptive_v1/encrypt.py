@@ -4,11 +4,11 @@ from typing import Literal
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.types import EncryptionResponse
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_encrypt
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.types import Key
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
+from src.crypto_gltf.data.types import EncryptionResponse
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_encrypt
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.types import Key
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
 
 
 class AdaptiveEncryptionModel(AdaptiveBaseModel):
@@ -54,7 +54,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
                 np.zeros((len(single_aad_arr)), dtype=np.uint32),
                 np.zeros((len(single_aad_arr)), dtype=np.uint32),
             )
-        ) # convert to arr so we can embed in file
+        )  # convert to arr so we can embed in file
 
         logger.info(
             f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"

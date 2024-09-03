@@ -5,18 +5,21 @@ from typing import Literal
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.types import AAD_DATA, EncryptionResponse
-from gltf_crypto_conan1014.encrypt.adaptive.cryptography.key_gen import generate_keys, get_subkey
-from gltf_crypto_conan1014.encrypt.adaptive.decrypt import AdaptiveDecryptionModel
-from gltf_crypto_conan1014.encrypt.adaptive.encrypt import AdaptiveEncryptionModel
-from gltf_crypto_conan1014.encrypt.adaptive.types import (
+from src.crypto_gltf.data.types import AAD_DATA, EncryptionResponse
+from src.crypto_gltf.encrypt.adaptive.cryptography.key_gen import (
+    generate_keys,
+    get_subkey,
+)
+from src.crypto_gltf.encrypt.adaptive.decrypt import AdaptiveDecryptionModel
+from src.crypto_gltf.encrypt.adaptive.encrypt import AdaptiveEncryptionModel
+from src.crypto_gltf.encrypt.adaptive.types import (
     AdaptiveCipherParams,
     BlockSelection,
     ImagesAdaptiveCipherParams,
     Key,
     MeshesAdaptiveCipherParams,
 )
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class AdaptiveCryptoSystemV3(AdaptiveEncryptionModel, AdaptiveDecryptionModel):

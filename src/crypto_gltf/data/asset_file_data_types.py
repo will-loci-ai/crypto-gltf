@@ -1,16 +1,17 @@
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 from PIL import Image
-from gltf_crypto_conan1014.data.types import Composition, JSONDict
 from pydantic import BaseModel, ConfigDict, model_validator
-from typing import Any
+from src.crypto_gltf.data.types import Composition, JSONDict
+
 
 class OffData(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
-    verts: np.ndarray
+    verts: type[np.ndarray]
     faces: list[Any]
-    colors: np.ndarray
+    colors: type[np.ndarray]
 
     @model_validator(mode="before")
     @classmethod
@@ -26,8 +27,7 @@ class OffData(BaseModel):
         return data
 
 
-@dataclass
-class Gltf2Data:
+class Gltf2Data(BaseModel):
     gltf: JSONDict
     images: dict[int, Image.Image]
     accessors: dict[int, np.ndarray]

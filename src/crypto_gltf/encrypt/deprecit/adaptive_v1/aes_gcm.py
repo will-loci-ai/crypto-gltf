@@ -9,8 +9,8 @@ from base64 import urlsafe_b64encode as b64e
 from cryptography.fernet import InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from gltf_crypto_conan1014.data.types import EncryptionResponse
 from pydantic import BaseModel
+from src.crypto_gltf.data.types import EncryptionResponse
 
 backend = default_backend()
 
@@ -37,7 +37,9 @@ class AAD(BaseModel):
         return b64e(self.timestamp + self.iv + self.tag)
 
 
-def aes_gcm_encrypt(message: bytes, key: bytes) -> EncryptionResponse[bytes, bytes,bytes]:
+def aes_gcm_encrypt(
+    message: bytes, key: bytes
+) -> EncryptionResponse[bytes, bytes, bytes]:
     """encrypt message using AES-GCM cipher"""
 
     current_time = int(time.time()).to_bytes(8, "big")
@@ -50,7 +52,9 @@ def aes_gcm_encrypt(message: bytes, key: bytes) -> EncryptionResponse[bytes, byt
     ciphertext = encryptor.update(message) + encryptor.finalize()
     aad = b64e(current_time + iv + encryptor.tag)
 
-    return EncryptionResponse[bytes,bytes, bytes](ciphertext=ciphertext, aad=aad, key=key)
+    return EncryptionResponse[bytes, bytes, bytes](
+        ciphertext=ciphertext, aad=aad, key=key
+    )
 
 
 def aes_gcm_decrypt(ciphertext: bytes, aad_b64: bytes, key: bytes, ttl=None) -> bytes:

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.encrypt.deprecit.ca.base import CABaseModel, CACipherParams
-from gltf_crypto_conan1014.encrypt.deprecit.ca.ca import ExpConwaysHCA
+from src.crypto_gltf.encrypt.deprecit.ca.base import CABaseModel, CACipherParams
+from src.crypto_gltf.encrypt.deprecit.ca.ca import ExpConwaysHCA
 
 
 class CAEncryptionModel(CABaseModel):

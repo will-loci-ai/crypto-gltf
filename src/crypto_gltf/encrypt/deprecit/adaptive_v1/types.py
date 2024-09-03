@@ -1,6 +1,6 @@
 from typing import Literal
 
-from gltf_crypto_conan1014.data.types import BaseKey, BaseParams
+from src.crypto_gltf.data.types import BaseKey, BaseParams
 
 
 class AdaptiveCipherParamsV1(BaseParams):

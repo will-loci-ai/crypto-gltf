@@ -2,10 +2,10 @@ from pathlib import Path
 from typing import Literal
 
 import pytest
-from gltf_crypto_conan1014 import Asset
-from gltf_crypto_conan1014.data.types import FileType
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.file.file import File
+from src.crypto_gltf import Asset
+from src.crypto_gltf.data.types import FileType
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.file.file import File
 
 TEST_ASSET_DIR = Path(__file__).parent / "assets"
 ASSET_PATHS = [

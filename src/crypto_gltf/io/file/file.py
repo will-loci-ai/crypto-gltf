@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import Type
 
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.file.gltf2.gltf2 import GLTFFile
-from gltf_crypto_conan1014.io.file.off.off import OffFile
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.file.gltf2.gltf2 import GLTFFile
+from src.crypto_gltf.io.file.off.off import OffFile
 
 
 def File(import_filepath: str) -> BaseFile:

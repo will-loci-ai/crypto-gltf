@@ -4,16 +4,20 @@ from time import time
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.types import EncryptionResponse
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.decrypt import AdaptiveDecryptionModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.encrypt import AdaptiveEncryptionModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.key_gen import generate_keys, get_k1, get_k2
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.types import (
+from src.crypto_gltf.data.types import EncryptionResponse
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.decrypt import AdaptiveDecryptionModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.encrypt import AdaptiveEncryptionModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.key_gen import (
+    generate_keys,
+    get_k1,
+    get_k2,
+)
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.types import (
     AdaptiveCipherParamsV2,
     BlockSelection,
     Key,
 )
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):

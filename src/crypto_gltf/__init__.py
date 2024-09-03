@@ -4,14 +4,14 @@ from dataclasses import dataclass
 from typing import Literal, Type
 
 import numpy as np
-from gltf_crypto_conan1014.data.types import AAD_DATA, BaseKey, BaseParams, EncryptionResponse
-from gltf_crypto_conan1014.encrypt.adaptive.system import AdaptiveCryptoSystemV3
-from gltf_crypto_conan1014.encrypt.base import CRYPTO_SYSTEMS, BaseCryptoSystem
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.system import AdaptiveCryptoSystemV1
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.system import AdaptiveCryptoSystemV2
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.file.file import File
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.data.types import AAD_DATA, BaseKey, BaseParams, EncryptionResponse
+from src.crypto_gltf.encrypt.adaptive.system import AdaptiveCryptoSystemV3
+from src.crypto_gltf.encrypt.base import CRYPTO_SYSTEMS, BaseCryptoSystem
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.system import AdaptiveCryptoSystemV1
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.system import AdaptiveCryptoSystemV2
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.file.file import File
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 @dataclass

@@ -3,10 +3,10 @@ from typing import Literal
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_decrypt
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.types import Key
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.aes_gcm import aes_gcm_decrypt
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.base import AdaptiveBaseModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.types import Key
+from src.crypto_gltf.encrypt.deprecit.adaptive_v1.utils import get_bytes, insert_bytes
 
 
 class AdaptiveDecryptionModel(AdaptiveBaseModel):

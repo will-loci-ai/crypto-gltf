@@ -2,15 +2,15 @@ from time import time
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.aes_gcm import aes_gcm_decrypt
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.base import AdaptiveBaseModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.types import (
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.aes_gcm import aes_gcm_decrypt
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.base import AdaptiveBaseModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.types import (
     AdaptiveCipherParamsV2,
     BlockSelection,
     Key,
     SBlocks,
 )
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.utils import (
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.utils import (
     combine_sblocks,
     get_sblocks,
     put_sblocks,

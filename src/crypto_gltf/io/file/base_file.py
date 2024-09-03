@@ -1,17 +1,14 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
 from functools import cached_property
 from tempfile import TemporaryDirectory
-from typing import Any
 
-import numpy as np
 from loci_asset.asset import LociAsset
-from gltf_crypto_conan1014.data.asset_file_data_types import AssetFileDataType
-from gltf_crypto_conan1014.data.types import AAD_DATA, Extension
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
 from pydantic import BaseModel, ConfigDict
+from src.crypto_gltf.data.asset_file_data_types import AssetFileDataType
+from src.crypto_gltf.data.types import AAD_DATA, Extension
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class BaseFile(BaseModel):

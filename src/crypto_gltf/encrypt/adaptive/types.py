@@ -6,10 +6,9 @@ from functools import cached_property
 from typing import Any, Literal
 
 import numpy as np
-from gltf_crypto_conan1014.data.types import BaseKey, BaseParams
-from gltf_crypto_conan1014.encrypt.adaptive.utils import buffer_length
 from pydantic import BaseModel, model_validator
-
+from src.crypto_gltf.data.types import BaseKey, BaseParams
+from src.crypto_gltf.encrypt.adaptive.utils import buffer_length
 
 
 class Key(BaseKey):

@@ -1,8 +1,8 @@
 from typing import ClassVar, Literal
 
 import numpy as np
-from gltf_crypto_conan1014.data.types import AAD_DATA, BaseKey, BaseParams, EncryptionResponse
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.data.types import AAD_DATA, BaseKey, BaseParams, EncryptionResponse
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 CRYPTO_SYSTEMS = Literal["AdaptiveV1", "AdaptiveV2", "AdaptiveV3", "CA"]
 

@@ -1,5 +1,5 @@
 import numpy as np
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.types import (
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.types import (
     AdaptiveCipherParamsV2,
     BlockSelection,
     SBlocks,

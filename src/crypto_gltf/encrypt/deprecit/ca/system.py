@@ -2,17 +2,18 @@ from __future__ import annotations
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.encrypt.deprecit.ca.base import CACipherParams
-from gltf_crypto_conan1014.encrypt.deprecit.ca.ca import ExpConwaysHCA
-from gltf_crypto_conan1014.encrypt.deprecit.ca.decrypt import CADecryptionModel
-from gltf_crypto_conan1014.encrypt.deprecit.ca.encrypt import CAEncryptionModel
-from gltf_crypto_conan1014.encrypt.deprecit.ca.params import RANDOM_VARIANCE
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
 from pydantic import BaseModel, ConfigDict
+from src.crypto_gltf.encrypt.deprecit.ca.base import CACipherParams
+from src.crypto_gltf.encrypt.deprecit.ca.ca import ExpConwaysHCA
+from src.crypto_gltf.encrypt.deprecit.ca.decrypt import CADecryptionModel
+from src.crypto_gltf.encrypt.deprecit.ca.encrypt import CAEncryptionModel
+from src.crypto_gltf.encrypt.deprecit.ca.params import RANDOM_VARIANCE
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class CACryptoSystem(BaseModel):
     """Conways game of life cellular automata cipher system"""
+
     AAD: bool = False
 
     model_config = ConfigDict(arbitrary_types_allowed=True)

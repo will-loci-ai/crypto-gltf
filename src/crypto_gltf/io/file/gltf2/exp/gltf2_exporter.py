@@ -3,11 +3,13 @@ import os
 import struct
 from functools import cached_property
 
-from gltf_crypto_conan1014.data.asset_file_data_types import Gltf2Data
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io import Buffer, BufferView
-from gltf_crypto_conan1014.io.file.gltf2.exp.gltf2_io_binary_data import BinaryData as ExpBinaryData
-from gltf_crypto_conan1014.io.file.gltf2.exp.gltf2_io_buffer import Buffer as ExpBuffer
-from gltf_crypto_conan1014.io.file.gltf2.utils import uri_to_path
+from src.crypto_gltf.data.asset_file_data_types import Gltf2Data
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io import Buffer, BufferView
+from src.crypto_gltf.io.file.gltf2.exp.gltf2_io_binary_data import (
+    BinaryData as ExpBinaryData,
+)
+from src.crypto_gltf.io.file.gltf2.exp.gltf2_io_buffer import Buffer as ExpBuffer
+from src.crypto_gltf.io.file.gltf2.utils import uri_to_path
 
 
 class GlTF2Exporter:

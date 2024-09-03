@@ -4,11 +4,11 @@ from typing import Type
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.types import EncryptionResponse
-from gltf_crypto_conan1014.encrypt.adaptive.base import AdaptiveBaseModel
-from gltf_crypto_conan1014.encrypt.adaptive.cryptography.aes_gcm import aes_gcm_encrypt
-from gltf_crypto_conan1014.encrypt.adaptive.types import AdaptiveCipherParams, BufferView, Key
-from gltf_crypto_conan1014.encrypt.adaptive.utils import get_bits, put_bits
+from src.crypto_gltf.data.types import EncryptionResponse
+from src.crypto_gltf.encrypt.adaptive.base import AdaptiveBaseModel
+from src.crypto_gltf.encrypt.adaptive.cryptography.aes_gcm import aes_gcm_encrypt
+from src.crypto_gltf.encrypt.adaptive.types import AdaptiveCipherParams, BufferView, Key
+from src.crypto_gltf.encrypt.adaptive.utils import get_bits, put_bits
 
 
 class AdaptiveEncryptionModel(AdaptiveBaseModel):
@@ -26,9 +26,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         for arr, params in data:
 
             buffer_view = BufferView.from_shape(shape=arr.shape, params=params)
-
-          
-
 
             p_buffer, q_buffer, r_buffer = (
                 buffer_view.p_buffer,

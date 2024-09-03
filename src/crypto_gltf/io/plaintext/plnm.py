@@ -4,8 +4,8 @@ from typing import Type
 
 import numpy as np
 from PIL import Image
-from gltf_crypto_conan1014.data.types import PlnMDataType
-from gltf_crypto_conan1014.io.plaintext.base_plaintext import BasePlainText
+from src.crypto_gltf.data.types import PlnMDataType
+from src.crypto_gltf.io.plaintext.base_plaintext import BasePlainText
 
 
 class PlnM(BasePlainText):
@@ -19,7 +19,7 @@ class PlnM(BasePlainText):
             return False
         meshes_eq = all(
             [np.allclose(arr1, arr2) for arr1, arr2 in zip(self.meshes, plnm.meshes)]
-        ) # allclose to account for type conversions to np.float32
+        )  # allclose to account for type conversions to np.float32
         images_eq = all(
             [np.array_equal(arr1, arr2) for arr1, arr2 in zip(self.images, plnm.images)]
         )

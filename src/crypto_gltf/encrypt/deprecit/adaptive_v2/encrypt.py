@@ -2,16 +2,16 @@ from time import time
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.types import EncryptionResponse
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.aes_gcm import aes_gcm_encrypt
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.base import AdaptiveBaseModel
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.types import (
+from src.crypto_gltf.data.types import EncryptionResponse
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.aes_gcm import aes_gcm_encrypt
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.base import AdaptiveBaseModel
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.types import (
     AdaptiveCipherParamsV2,
     BlockSelection,
     Key,
     SBlocks,
 )
-from gltf_crypto_conan1014.encrypt.deprecit.adaptive_v2.utils import (
+from src.crypto_gltf.encrypt.deprecit.adaptive_v2.utils import (
     combine_sblocks,
     get_sblocks,
     put_sblocks,
@@ -63,7 +63,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
         if not offset == sum([arr.size for arr in data]):
             raise Exception(f"Entire cipher text has not been used")
-        
+
         aad_arr = np.column_stack(
             (
                 np.frombuffer(r1.aad, dtype=np.uint32),

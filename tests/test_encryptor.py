@@ -1,5 +1,5 @@
-from gltf_crypto_conan1014 import Asset
-from gltf_crypto_conan1014.encrypt.adaptive.types import (
+from src.crypto_gltf import Asset
+from src.crypto_gltf.encrypt.adaptive.types import (
     ImagesAdaptiveCipherParams,
     MeshesAdaptiveCipherParams,
 )

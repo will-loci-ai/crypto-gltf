@@ -8,7 +8,7 @@ import typing
 
 import numpy as np
 from PIL import Image
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io_constants import ComponentType
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io_constants import ComponentType
 
 
 class BinaryData:

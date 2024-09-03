@@ -4,8 +4,8 @@ from base64 import urlsafe_b64encode as b64e
 from dataclasses import dataclass
 from typing import Any
 
-from gltf_crypto_conan1014.data.types import BaseKey, BaseParams
 from pydantic import BaseModel, model_validator
+from src.crypto_gltf.data.types import BaseKey, BaseParams
 
 
 class AdaptiveCipherParamsV2(BaseParams):

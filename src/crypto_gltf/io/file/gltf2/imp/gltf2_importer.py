@@ -8,10 +8,15 @@ from dataclasses import dataclass
 
 import numpy as np
 from PIL import Image as PILImage
-from gltf_crypto_conan1014.data.types import JSONDict
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io import Accessor, Buffer, BufferView, Image
-from gltf_crypto_conan1014.io.file.gltf2.utils import uri_to_path
 from pydantic import BaseModel, ConfigDict
+from src.crypto_gltf.data.types import JSONDict
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io import (
+    Accessor,
+    Buffer,
+    BufferView,
+    Image,
+)
+from src.crypto_gltf.io.file.gltf2.utils import uri_to_path
 
 
 class GlbModel(BaseModel):

@@ -1,7 +1,7 @@
 from typing import Literal
 
 import numpy as np
-from gltf_crypto_conan1014.utils.bit_utils import bit_slice
+from src.crypto_gltf.utils.bit_utils import bit_slice
 
 stack_dict = {"HEIGHT": 0, "WIDTH": 1, "DEPTH": 2}
 
@@ -35,4 +35,3 @@ def array_bit_slice_eq(
     arr1_slice = array_bit_slice(arr1.flatten(), start, stop)
     arr2_slice = array_bit_slice(arr2.flatten(), start, stop)
     return np.array_equal(arr1_slice, arr2_slice)
-

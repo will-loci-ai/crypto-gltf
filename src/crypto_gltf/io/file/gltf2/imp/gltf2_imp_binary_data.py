@@ -2,9 +2,9 @@ import io
 
 import numpy as np
 from PIL import Image
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io import Accessor
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io_constants import ComponentType, DataType
-from gltf_crypto_conan1014.io.file.gltf2.imp.gltf2_importer import GlTF2Importer
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io import Accessor
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io_constants import ComponentType, DataType
+from src.crypto_gltf.io.file.gltf2.imp.gltf2_importer import GlTF2Importer
 
 
 class BinaryData:

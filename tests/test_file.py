@@ -1,6 +1,8 @@
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.file.file import File
 from tempfile import TemporaryDirectory
+
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.file.file import File
+
 
 class TestFile:
 

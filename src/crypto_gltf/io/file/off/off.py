@@ -5,14 +5,14 @@ import struct
 
 import numpy as np
 from loguru import logger
-from gltf_crypto_conan1014.data.asset_file_data_types import AssetFileDataType, OffData
-from gltf_crypto_conan1014.data.types import AAD_DATA, Composition
-from gltf_crypto_conan1014.io.file.base_file import BaseFile
-from gltf_crypto_conan1014.io.plaintext.plnm import PlnM
+from src.crypto_gltf.data.asset_file_data_types import OffData
+from src.crypto_gltf.data.types import AAD_DATA, Composition
+from src.crypto_gltf.io.file.base_file import BaseFile
+from src.crypto_gltf.io.plaintext.plnm import PlnM
 
 
 class OffFile(BaseFile):
-    data: AssetFileDataType.OFF
+    data: OffData
 
     @classmethod
     def load(cls, import_path: str) -> OffFile:

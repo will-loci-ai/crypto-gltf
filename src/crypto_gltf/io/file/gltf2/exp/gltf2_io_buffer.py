@@ -4,8 +4,8 @@
 
 import base64
 
-from gltf_crypto_conan1014.io.file.gltf2.com.gltf2_io import BufferView
-from gltf_crypto_conan1014.io.file.gltf2.exp.gltf2_io_binary_data import BinaryData
+from src.crypto_gltf.io.file.gltf2.com.gltf2_io import BufferView
+from src.crypto_gltf.io.file.gltf2.exp.gltf2_io_binary_data import BinaryData
 
 
 class Buffer:

@@ -9,8 +9,8 @@ from base64 import urlsafe_b64encode as b64e
 from cryptography.fernet import InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from gltf_crypto_conan1014.data.types import EncryptionResponse
 from pydantic import BaseModel
+from src.crypto_gltf.data.types import EncryptionResponse
 
 
 class AAD(BaseModel):
@@ -74,4 +74,3 @@ def aes_gcm_decrypt(ciphertext: bytes, aad_b64: bytes, key: bytes, ttl=None) -> 
     decryptor = cipher.decryptor()
     decryptor.authenticate_additional_data(aad.timestamp)
     return decryptor.update(ciphertext) + decryptor.finalize()
-

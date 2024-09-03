@@ -1,8 +1,8 @@
 import secrets
 
 import numpy as np
-from gltf_crypto_conan1014.encrypt.adaptive.utils import buffer_length, get_bits, put_bits
-from gltf_crypto_conan1014.utils.numpy_utils import array_bit_slice_eq
+from src.crypto_gltf.encrypt.adaptive.utils import buffer_length, get_bits, put_bits
+from src.crypto_gltf.utils.numpy_utils import array_bit_slice_eq
 
 
 def test_put_get_inversion32():

@@ -5,13 +5,13 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from loguru import logger
-from gltf_crypto_conan1014.encrypt.adaptive.types import (
+from src.crypto_gltf.encrypt.adaptive.types import (
     AdaptiveCipherParams,
     BlockSelection,
     BufferView,
     Key,
 )
-from gltf_crypto_conan1014.encrypt.adaptive.utils import get_bits
+from src.crypto_gltf.encrypt.adaptive.utils import get_bits
 
 
 def aes_sha(sblock: bytes, ki: bytes) -> bytes:
