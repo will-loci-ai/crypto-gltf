@@ -12,14 +12,15 @@ class TestEncryptor:
         asset: Asset,
     ):
         plnm_plaintext = asset.file.plnm.__copy__()
-        meshes_cipher_params = MeshesAdaptiveCipherParams(p=2, q=2, r=10)
-        images_cipher_params = ImagesAdaptiveCipherParams(p=1, q=3, r=4)
-        encryption_response = asset.encrypt(
-            meshes_cipher_params=meshes_cipher_params,
-            images_cipher_params=images_cipher_params,
-            encryptor='AdaptiveV3'
-        )
-        asset.decrypt(
-            key=encryption_response.key,
-        )
+        encryption_response = asset.encrypt()
+        asset.decrypt(k3=encryption_response.key.k3)
+        assert plnm_plaintext == asset.file.plnm
+
+    def test_image_encryptor(
+        self,
+        asset: Asset,
+    ):
+        plnm_plaintext = asset.file.plnm.__copy__()
+        encryption_response = asset.encrypt(encrypt_images=True)
+        asset.decrypt(k3=encryption_response.key.k3)
         assert plnm_plaintext == asset.file.plnm

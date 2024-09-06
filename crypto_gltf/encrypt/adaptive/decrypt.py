@@ -59,9 +59,12 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
 
         toc = time() - tic
 
-        decrypted_data = aes_gcm_decrypt(
-            ciphertext=combined_sblocks, aad_b64=aad_b64, key=subkey
-        )
+        try:
+            decrypted_data = aes_gcm_decrypt(
+                ciphertext=combined_sblocks, aad_b64=aad_b64, key=subkey
+            )
+        except:
+            raise Exception("Invalid key.")
 
         tic = time()
 
@@ -84,7 +87,7 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
         if not offset == len(decrypted_data_arr):
             raise Exception(f"Entire plain text has not been used")
 
-        logger.debug(
-            f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
-        )
+        # logger.debug(
+        #     f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
+        # )
         return data

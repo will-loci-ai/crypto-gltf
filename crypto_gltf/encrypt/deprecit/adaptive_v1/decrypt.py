@@ -29,7 +29,9 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
         toc = time() - tic
 
         assert key.k1
-        decrypted_buffer = aes_gcm_decrypt(ciphertext=buffer, aad_b64=aad.tobytes(), key=key.k1)
+        decrypted_buffer = aes_gcm_decrypt(
+            ciphertext=buffer, aad_b64=aad.tobytes(), key=key.k1
+        )
 
         tic = time()
 

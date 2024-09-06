@@ -6,9 +6,11 @@ from typing import Literal, Type
 import numpy as np
 from crypto_gltf.data.types import AAD_DATA, BaseKey, BaseParams, EncryptionResponse
 from crypto_gltf.encrypt.adaptive.system import AdaptiveCryptoSystemV3
-from crypto_gltf.encrypt.base import CRYPTO_SYSTEMS, BaseCryptoSystem
-from crypto_gltf.encrypt.deprecit.adaptive_v1.system import AdaptiveCryptoSystemV1
-from crypto_gltf.encrypt.deprecit.adaptive_v2.system import AdaptiveCryptoSystemV2
+from crypto_gltf.encrypt.adaptive.types import (
+    ImagesAdaptiveCipherParams,
+    Key,
+    MeshesAdaptiveCipherParams,
+)
 from crypto_gltf.io.file.base_file import BaseFile
 from crypto_gltf.io.file.file import File
 from crypto_gltf.io.plaintext.plnm import PlnM
@@ -35,47 +37,50 @@ class Asset:
 
     def encrypt(
         self,
-        meshes_cipher_params: BaseParams,
-        images_cipher_params: BaseParams,
-        key: BaseKey | None = None,
+        meshes_cipher_params: tuple[int, int, int] = (2, 2, 10),
+        images_cipher_params: tuple[int, int, int] = (1, 1, 6),
+        key: bytes | None = None,
         encrypt_images: bool = False,
-        encryptor: CRYPTO_SYSTEMS = "AdaptiveV3",
-    ) -> EncryptionResponse[PlnM, AAD_DATA, BaseKey]:
+    ) -> EncryptionResponse[PlnM, AAD_DATA, Key]:
         """Encrypt a file"""
         self.images_encrypted = encrypt_images
-        encrypt_localizer: dict[CRYPTO_SYSTEMS, Type[BaseCryptoSystem]] = {
-            "AdaptiveV1": AdaptiveCryptoSystemV1,
-            "AdaptiveV2": AdaptiveCryptoSystemV2,
-            "AdaptiveV3": AdaptiveCryptoSystemV3,
-        }
-        SYSTEM = encrypt_localizer[encryptor]
-        response = SYSTEM.encrypt(
+
+        mesh_params = MeshesAdaptiveCipherParams(
+            p=meshes_cipher_params[0],
+            q=meshes_cipher_params[1],
+            r=meshes_cipher_params[2],
+        )
+        img_params = ImagesAdaptiveCipherParams(
+            p=images_cipher_params[0],
+            q=images_cipher_params[1],
+            r=images_cipher_params[2],
+        )
+        response = AdaptiveCryptoSystemV3.encrypt(
             plnm=self.file.plnm,
-            meshes_cipher_params=meshes_cipher_params,
-            images_cipher_params=images_cipher_params,
-            key=key,
+            meshes_cipher_params=mesh_params,
+            images_cipher_params=img_params,
+            k3=key,
             encrypt_images=encrypt_images,
         )
         self.file.insert_plnm(response.ciphertext)
 
-        if SYSTEM.AAD:
-            assert response.aad is not None
-            self.file.embed_aad(response.aad)
+        assert response.aad is not None
+        self.file.embed_aad(response.aad)
 
         return response
 
-    def decrypt(self, key: BaseKey, decryptor: CRYPTO_SYSTEMS = "AdaptiveV3") -> bool:
+    def decrypt(
+        self,
+        k1: bytes | None = None,
+        k2: bytes | None = None,
+        k3: bytes | None = None,
+    ) -> bool:
         """Decrypt a file"""
-        decrypt_localizer: dict[CRYPTO_SYSTEMS, Type[BaseCryptoSystem]] = {
-            "AdaptiveV1": AdaptiveCryptoSystemV1,
-            "AdaptiveV2": AdaptiveCryptoSystemV2,
-            "AdaptiveV3": AdaptiveCryptoSystemV3,
-        }
-        SYSTEM = decrypt_localizer[decryptor]
+        key = Key(k1=k1, k2=k2, k3=k3)
         aad = (
             self.file.aad
         )  # important we do this before extracting plnm, else aad extracted as well
 
-        plnm = SYSTEM.decrypt(plnm=self.file.plnm, key=key, aad=aad)
+        plnm = AdaptiveCryptoSystemV3.decrypt(plnm=self.file.plnm, key=key, aad=aad)
         self.file.insert_plnm(plnm)
         return True

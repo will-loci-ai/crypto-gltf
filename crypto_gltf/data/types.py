@@ -159,6 +159,10 @@ class AAD_DATA(BaseModel):
 class BaseParams(BaseModel):
     """Base class for encryption model parameters"""
 
+    p: int
+    q: int
+    r: int
+
 
 class BaseKey(BaseModel):
     """Base class for encryption model keys"""

@@ -46,7 +46,7 @@ class GLTFFile(BaseFile):
             is_glb=is_glb,
         )
 
-        logger.debug(f"{filename_ext[1:]} import took {time()-tic} seconds")
+        # logger.debug(f"{filename_ext[1:]} import took {time()-tic} seconds")
         return cls(data=data, import_path=import_path, filename_ext=filename_ext)
 
     def save(self, export_dir: str, images_encrypted: bool = False) -> str:
@@ -62,7 +62,7 @@ class GLTFFile(BaseFile):
         )
         export_filepath = gltf_exporter.export(self.data)
 
-        logger.debug(f"{self.filename_ext[1:]} export took {time()-tic} seconds")
+        # logger.debug(f"{self.filename_ext[1:]} export took {time()-tic} seconds")
 
         return export_filepath
 

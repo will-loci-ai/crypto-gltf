@@ -129,9 +129,9 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             (np.array(padding, dtype=np.uint32), aad_arr)
         )  # add padding to authentification information
 
-        logger.debug(
-            f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
-        )
+        # logger.debug(
+        #     f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
+        # )
 
         return EncryptionResponse[list[np.ndarray], np.ndarray, Key](
             ciphertext=[item[0] for item in data],

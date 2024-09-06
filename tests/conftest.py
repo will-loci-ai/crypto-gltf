@@ -11,7 +11,6 @@ TEST_ASSET_DIR = Path(__file__).parent / "assets"
 ASSET_PATHS = [
     p for p in TEST_ASSET_DIR.glob("*") if p.suffix.lower() in FileType.ASSET.extensions
 ]
-# CRYPTO_SYSTEMS = Literal["AdaptiveV1", "AdaptiveV2", "AdaptiveV3", "CA"]
 CRYPTO_SYSTEMS = [
     "AdaptiveV1",
     "AdaptiveV2",

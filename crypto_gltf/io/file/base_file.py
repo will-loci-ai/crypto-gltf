@@ -7,7 +7,6 @@ from tempfile import TemporaryDirectory
 from crypto_gltf.data.asset_file_data_types import AssetFileDataType
 from crypto_gltf.data.types import AAD_DATA, Extension
 from crypto_gltf.io.plaintext.plnm import PlnM
-from loci_asset.asset import LociAsset
 from pydantic import BaseModel, ConfigDict
 
 
@@ -46,15 +45,6 @@ class BaseFile(BaseModel):
     @cached_property
     def export_filename(self) -> str:
         return f"exported_{self.filename}{self.filename_ext}"
-
-    @property
-    def render(self):
-        """Render file"""
-        with TemporaryDirectory() as tmp_dir:
-            ret = self.save(tmp_dir)
-            asset = LociAsset.from_url(ret)
-            img = asset.medium_res_image
-            return img
 
     @property
     def plnm(self) -> PlnM:

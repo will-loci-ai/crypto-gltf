@@ -41,9 +41,8 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         r1 = aes_gcm_encrypt(message=combined_sblocks.s1, key=key.k1)
         r2 = aes_gcm_encrypt(message=combined_sblocks.s2, key=key.k2)
         r3 = aes_gcm_encrypt(message=combined_sblocks.s3, key=key.k3)
-        
-        r_blocks = SBlocks(s1=r1.ciphertext, s2=r2.ciphertext, s3=r3.ciphertext)
 
+        r_blocks = SBlocks(s1=r1.ciphertext, s2=r2.ciphertext, s3=r3.ciphertext)
 
         tic = time()
 

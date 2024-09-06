@@ -61,16 +61,16 @@ class GlTF2Importer:
             glb_buffer = None
 
         cls.check_version(gltf)
-        
+
         if gltf.get("accessors"):
             accessors = [Accessor.from_dict(accessor) for accessor in gltf["accessors"]]
         else:
             accessors = []
-        if gltf.get('buffers'):
+        if gltf.get("buffers"):
             buffers = [Buffer.from_dict(buffer) for buffer in gltf["buffers"]]
         else:
             buffers = []
-        if gltf.get('bufferViews'):
+        if gltf.get("bufferViews"):
             buffer_views = [
                 BufferView.from_dict(bufferview) for bufferview in gltf["bufferViews"]
             ]

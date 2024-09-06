@@ -77,7 +77,7 @@ class OffFile(BaseFile):
                 continue
             i = i + 1
 
-        logger.info(f".off file loaded from {import_path}")
+        # logger.info(f".off file loaded from {import_path}")
 
         return cls(
             import_path=import_path,
@@ -125,7 +125,7 @@ class OffFile(BaseFile):
 
         fp.close()
 
-        logger.info(f".off file saved to {export_filepath}")
+        # logger.info(f".off file saved to {export_filepath}")
 
         return export_filepath
 

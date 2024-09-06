@@ -68,7 +68,9 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         )
 
         logger.debug(f"Adaptive encryption took {time()-tic} seconds.")
-        return EncryptionResponse[PlnM, AAD_DATA, Key](ciphertext=plnm, aad=aad, key=key)
+        return EncryptionResponse[PlnM, AAD_DATA, Key](
+            ciphertext=plnm, aad=aad, key=key
+        )
 
     @staticmethod
     def decrypt(
@@ -100,7 +102,7 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
                 key=key,
                 params=meshes_cipher_params,
                 aad=aad.aad,
-                selection=BlockSelection(r=True)
+                selection=BlockSelection(r=True),
             )
 
             toc = time()
@@ -114,13 +116,12 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
                 key=key,
                 params=meshes_cipher_params,
                 aad=aad.aad,
-                selection=BlockSelection(q=True)
+                selection=BlockSelection(q=True),
             )
 
             key.k1 = get_k1(
                 float_arrs=float_arrs, params=meshes_cipher_params, k2=key.k2
             )
-
 
         assert key.k1 is not None
 
@@ -129,7 +130,7 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
             key=key,
             params=meshes_cipher_params,
             aad=aad.aad,
-            selection=BlockSelection(p=True)
+            selection=BlockSelection(p=True),
         )
 
         for idx, i in enumerate(meshes_float_arrs_idxs):

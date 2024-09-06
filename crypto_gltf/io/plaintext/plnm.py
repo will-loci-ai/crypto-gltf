@@ -22,8 +22,8 @@ class PlnM(BasePlainText):
             [np.allclose(arr1, arr2) for arr1, arr2 in zip(self.meshes, plnm.meshes)]
         )  # allclose to account for type conversions to np.float32
         images_eq = all(
-            [np.array_equal(arr1, arr2) for arr1, arr2 in zip(self.images, plnm.images)]
-        )
+            [np.allclose(arr1, arr2, 3) for arr1, arr2 in zip(self.images, plnm.images)]
+        ) # allclose as jpeg compression sometimes alters the image
         return meshes_eq and images_eq
 
     def __copy__(self):

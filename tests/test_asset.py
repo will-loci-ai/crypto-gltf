@@ -14,8 +14,8 @@ def test_asset(asset: Asset):
 
     with TemporaryDirectory() as tmp_dir:
         plnm_plaintext = asset.file.plnm.__copy__()
-        meshes_cipher_params = MeshesAdaptiveCipherParams(p=2, q=2, r=10)
-        images_cipher_params = ImagesAdaptiveCipherParams(p=1, q=1, r=6)
+        meshes_cipher_params = (2, 2, 10)
+        images_cipher_params = (1, 1, 6)
         encryption_response = asset.encrypt(
             meshes_cipher_params=meshes_cipher_params,
             images_cipher_params=images_cipher_params,
@@ -24,6 +24,6 @@ def test_asset(asset: Asset):
 
         encrypted_asset = Asset.load(export_path)
         encrypted_asset.decrypt(
-            key=encryption_response.key,
+            k3=encryption_response.key.k3,
         )
         assert plnm_plaintext == encrypted_asset.file.plnm
