@@ -1,29 +1,32 @@
 from tempfile import TemporaryDirectory
 
-import pytest
 from crypto_gltf import Asset
-from crypto_gltf.encrypt.adaptive.types import (
-    ImagesAdaptiveCipherParams,
-    MeshesAdaptiveCipherParams,
-)
+from crypto_gltf.encrypt.deprecit.adaptive_v1.types import AdaptiveCipherParamsV1
+from crypto_gltf.local_tests.local_paths import glb_assets, gltf_assets, off_assets
 
+"""Local testing"""
 
-@pytest.mark.dependency(depends=["test_encryptor", "test_import_export"])
-def test_asset(asset: Asset):
-    """test full import, export, encryption, decryption pipeline"""
+if __name__ == "__main__":
+
+    filepath = glb_assets[2]
+    asset = Asset.load(filepath)
 
     with TemporaryDirectory() as tmp_dir:
         plnm_plaintext = asset.file.plnm.__copy__()
-        meshes_cipher_params = MeshesAdaptiveCipherParams(p=2, q=1, r=1)
-        images_cipher_params = ImagesAdaptiveCipherParams(p=1, q=1, r=6)
+        meshes_cipher_params = AdaptiveCipherParamsV1(p=2)
+        images_cipher_params = AdaptiveCipherParamsV1(p=2)
         encryption_response = asset.encrypt(
             meshes_cipher_params=meshes_cipher_params,
             images_cipher_params=images_cipher_params,
+            encryptor="AdaptiveV1",
         )
+
         export_path = asset.save(tmp_dir)
 
         encrypted_asset = Asset.load(export_path)
         encrypted_asset.decrypt(
             key=encryption_response.key,
+            decryptor="AdaptiveV1",
         )
+
         assert plnm_plaintext == encrypted_asset.file.plnm

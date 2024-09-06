@@ -1,7 +1,7 @@
 from tempfile import TemporaryDirectory
 
-from src.crypto_gltf.io.file.base_file import BaseFile
-from src.crypto_gltf.io.file.file import File
+from crypto_gltf.io.file.base_file import BaseFile
+from crypto_gltf.io.file.file import File
 
 
 class TestFile:
