@@ -22,7 +22,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
     @staticmethod
     def _encrypt(
-        data: list[np.ndarray], key: Key, params: AdaptiveCipherParamsV2, timing
+        data: list[np.ndarray], key: Key, params: AdaptiveCipherParamsV2
     ) -> EncryptionResponse[list[np.ndarray], np.ndarray, Key]:
 
         tic = time()
@@ -34,7 +34,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             )
 
         toc = time() - tic
-        tac = time()
         combined_sblocks = combine_sblocks(sblocks_list=sblocks_list)
 
         assert key.k1 and key.k2 and key.k3
@@ -44,7 +43,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         r3 = aes_gcm_encrypt(message=combined_sblocks.s3, key=key.k3)
         
         r_blocks = SBlocks(s1=r1.ciphertext, s2=r2.ciphertext, s3=r3.ciphertext)
-        timing['encrypt_crypto']+=time()-tac
 
 
         tic = time()
@@ -73,7 +71,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
                 np.frombuffer(r3.aad, dtype=np.uint32),
             )
         )  # convert to arr so we can embed in file
-        timing['encrypt_bit']+=time()-tic + toc
         logger.info(
             f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
         )

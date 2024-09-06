@@ -32,7 +32,6 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         images_cipher_params: AdaptiveCipherParamsV2,
         encrypt_images: bool = False,
         key: Key | None = None,
-        timing: dict = {},
     ) -> EncryptionResponse[PlnM, AAD_DATA, Key]:
 
         tic = time()
@@ -41,7 +40,6 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         else:
             assert key.size == 1 and key.k3 is not None
             key = generate_keys(plnm, meshes_cipher_params, k3=key.k3)
-        timing['encrypt_keygen']+=time()-tic
         # Get non-integer type arrays
         # i.e. vertices and colors
         meshes_float_arrs_idxs = np.array(
@@ -56,7 +54,7 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         ]  # convert to float32
 
         encryption_response = AdaptiveEncryptionModel._encrypt(
-            data=float_arrs, key=key, params=meshes_cipher_params, timing=timing
+            data=float_arrs, key=key, params=meshes_cipher_params
         )
 
         for idx, i in enumerate(meshes_float_arrs_idxs):
@@ -68,20 +66,15 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
             meshes_params=meshes_cipher_params.__dict__,
             images_params=images_cipher_params.__dict__,
         )
-        timing['encrypt']+=time()-tic
 
         logger.debug(f"Adaptive encryption took {time()-tic} seconds.")
-        return (
-            EncryptionResponse[PlnM, AAD_DATA, Key](ciphertext=plnm, aad=aad, key=key),
-            timing,
-        )
+        return EncryptionResponse[PlnM, AAD_DATA, Key](ciphertext=plnm, aad=aad, key=key)
 
     @staticmethod
     def decrypt(
         plnm: PlnM,
         key: Key,
         aad: AAD_DATA,
-        timing: dict
     ) -> PlnM:
         tic = time()
         meshes_cipher_params = AdaptiveCipherParamsV2(**aad.meshes_params)
@@ -107,14 +100,13 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
                 key=key,
                 params=meshes_cipher_params,
                 aad=aad.aad,
-                selection=BlockSelection(r=True),timing=timing
+                selection=BlockSelection(r=True)
             )
 
             toc = time()
             key.k2 = get_k2(
                 float_arrs=float_arrs, params=meshes_cipher_params, k3=key.k3
             )
-            timing['decrypt_keygen']+=time()-toc
 
         if key.k2:
             float_arrs = AdaptiveDecryptionModel._decrypt(
@@ -122,14 +114,12 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
                 key=key,
                 params=meshes_cipher_params,
                 aad=aad.aad,
-                selection=BlockSelection(q=True),timing=timing
+                selection=BlockSelection(q=True)
             )
-            toc = time()
 
             key.k1 = get_k1(
                 float_arrs=float_arrs, params=meshes_cipher_params, k2=key.k2
             )
-            timing['decrypt_keygen']+=time()-toc
 
 
         assert key.k1 is not None
@@ -139,15 +129,14 @@ class AdaptiveCryptoSystemV2(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
             key=key,
             params=meshes_cipher_params,
             aad=aad.aad,
-            selection=BlockSelection(p=True),timing=timing
+            selection=BlockSelection(p=True)
         )
 
         for idx, i in enumerate(meshes_float_arrs_idxs):
             plnm.meshes[i] = decrypted_data[idx]
 
         assert key.filled
-        timing['decrypt']+=time()-tic
 
         logger.debug(f"Adaptive decryption took {time()-tic} seconds.")
 
-        return plnm, timing
+        return plnm

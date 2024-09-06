@@ -40,7 +40,6 @@ class Asset:
         key: BaseKey | None = None,
         encrypt_images: bool = False,
         encryptor: CRYPTO_SYSTEMS = "AdaptiveV3",
-        timing: dict = {},
     ) -> EncryptionResponse[PlnM, AAD_DATA, BaseKey]:
         """Encrypt a file"""
         self.images_encrypted = encrypt_images
@@ -50,15 +49,12 @@ class Asset:
             "AdaptiveV3": AdaptiveCryptoSystemV3,
         }
         SYSTEM = encrypt_localizer[encryptor]
-        response, timing = SYSTEM.encrypt(
-        # response = SYSTEM.encrypt(
-
+        response = SYSTEM.encrypt(
             plnm=self.file.plnm,
             meshes_cipher_params=meshes_cipher_params,
             images_cipher_params=images_cipher_params,
             key=key,
             encrypt_images=encrypt_images,
-            timing=timing,
         )
         self.file.insert_plnm(response.ciphertext)
 
@@ -66,12 +62,9 @@ class Asset:
             assert response.aad is not None
             self.file.embed_aad(response.aad)
 
-        return response, timing
-        # return response
+        return response
 
-    def decrypt(
-        self, key: BaseKey, decryptor: CRYPTO_SYSTEMS = "AdaptiveV3", timing: dict = {}
-    ) -> bool:
+    def decrypt(self, key: BaseKey, decryptor: CRYPTO_SYSTEMS = "AdaptiveV3") -> bool:
         """Decrypt a file"""
         decrypt_localizer: dict[CRYPTO_SYSTEMS, Type[BaseCryptoSystem]] = {
             "AdaptiveV1": AdaptiveCryptoSystemV1,
@@ -83,12 +76,6 @@ class Asset:
             self.file.aad
         )  # important we do this before extracting plnm, else aad extracted as well
 
-        plnm, timing = SYSTEM.decrypt(
-            plnm=self.file.plnm, key=key, aad=aad, timing=timing
-        )
-        # plnm = SYSTEM.decrypt(
-        #     plnm=self.file.plnm, key=key, aad=aad
-        # )
+        plnm = SYSTEM.decrypt(plnm=self.file.plnm, key=key, aad=aad)
         self.file.insert_plnm(plnm)
-        # return True
-        return True, timing
+        return True

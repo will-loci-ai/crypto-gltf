@@ -12,8 +12,8 @@ class TestEncryptor:
         asset: Asset,
     ):
         plnm_plaintext = asset.file.plnm.__copy__()
-        meshes_cipher_params = MeshesAdaptiveCipherParams(p=2, q=2, r=2)
-        images_cipher_params = ImagesAdaptiveCipherParams(p=1, q=1, r=1)
+        meshes_cipher_params = MeshesAdaptiveCipherParams(p=2, q=2, r=10)
+        images_cipher_params = ImagesAdaptiveCipherParams(p=1, q=3, r=4)
         encryption_response = asset.encrypt(
             meshes_cipher_params=meshes_cipher_params,
             images_cipher_params=images_cipher_params,

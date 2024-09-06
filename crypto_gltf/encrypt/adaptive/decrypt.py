@@ -21,7 +21,6 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
         key: Key,
         selection: BlockSelection,
         aad: np.ndarray,
-        timing: dict
     ) -> list[tuple[np.ndarray, AdaptiveCipherParams]]:
         tic = time()
 
@@ -59,12 +58,10 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
             combined_sblocks.extend(buffer.tobytes())
 
         toc = time() - tic
-        tac = time()
 
         decrypted_data = aes_gcm_decrypt(
             ciphertext=combined_sblocks, aad_b64=aad_b64, key=subkey
         )
-        timing['decrypt_crypto'] += time()-tac
 
         tic = time()
 
@@ -86,7 +83,6 @@ class AdaptiveDecryptionModel(AdaptiveBaseModel):
 
         if not offset == len(decrypted_data_arr):
             raise Exception(f"Entire plain text has not been used")
-        timing['decrypt_bit']+=time()-tic + toc
 
         logger.debug(
             f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"

@@ -14,7 +14,7 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
 
     @staticmethod
     def _encrypt(
-        data: list[tuple[np.ndarray, AdaptiveCipherParams]], key: Key, timing: dict
+        data: list[tuple[np.ndarray, AdaptiveCipherParams]], key: Key
     ) -> EncryptionResponse[list[np.ndarray], np.ndarray, Key]:
 
         tic = time()
@@ -58,7 +58,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
             s3.extend(r_buffer.tobytes())
 
         toc = time() - tic
-        tac = time()
         assert key.k1 and key.k2 and key.k3
 
         r1 = aes_gcm_encrypt(message=s1, key=key.k1)
@@ -70,7 +69,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         aad.extend(r1.aad)
         aad.extend(r2.aad)
         aad.extend(r3.aad)
-        timing["encrypt_crypto"] += time() - tac
 
         tic = time()
 
@@ -130,7 +128,6 @@ class AdaptiveEncryptionModel(AdaptiveBaseModel):
         aad = np.concatenate(
             (np.array(padding, dtype=np.uint32), aad_arr)
         )  # add padding to authentification information
-        timing["encrypt_bit"] += time() - tic + toc
 
         logger.debug(
             f"Byte retrieval/insertion and reshaping took {time()-tic + toc} seconds"
