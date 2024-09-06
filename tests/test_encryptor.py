@@ -1,5 +1,5 @@
-from src.crypto_gltf import Asset
-from src.crypto_gltf.encrypt.adaptive.types import (
+from crypto_gltf import Asset
+from crypto_gltf.encrypt.adaptive.types import (
     ImagesAdaptiveCipherParams,
     MeshesAdaptiveCipherParams,
 )
@@ -17,6 +17,7 @@ class TestEncryptor:
         encryption_response = asset.encrypt(
             meshes_cipher_params=meshes_cipher_params,
             images_cipher_params=images_cipher_params,
+            encryptor='AdaptiveV3'
         )
         asset.decrypt(
             key=encryption_response.key,
