@@ -18,7 +18,8 @@ class OffData:
     @classmethod
     def validate_fields(cls, data):
         verts = data.get("verts")
-        assert Composition.VERTS == verts
+        if not Composition.VERTS == verts:
+            raise ValueError('Malformatted vertices. Bad .off file.')
         return data
 
 

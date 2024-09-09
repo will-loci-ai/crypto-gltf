@@ -16,7 +16,8 @@ class Key(BaseKey):
     @classmethod
     def validate_fields(cls, data: Any):
         k1, k2, k3 = data.get("k1"), data.get("k2"), data.get("k3")
-        assert k1 or k2 or k3  # at least one key must be provided
+        if not (k1 or k2 or k3):
+            raise ValueError(f'At least one key value must be initialised.')
         return data
 
     def __str__(self) -> str:
