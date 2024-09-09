@@ -2,10 +2,6 @@ from tempfile import TemporaryDirectory
 
 import pytest
 from crypto_gltf import Asset
-from crypto_gltf.encrypt.adaptive.types import (
-    ImagesAdaptiveCipherParams,
-    MeshesAdaptiveCipherParams,
-)
 
 
 @pytest.mark.dependency(depends=["test_encryptor", "test_import_export"])

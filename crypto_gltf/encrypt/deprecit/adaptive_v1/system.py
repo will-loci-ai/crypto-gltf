@@ -22,7 +22,7 @@ class AdaptiveCryptoSystemV1(AdaptiveEncryptionModel, AdaptiveDecryptionModel):
         plnm: PlnM,
         meshes_cipher_params: AdaptiveCipherParamsV1,
         images_cipher_params: AdaptiveCipherParamsV1,
-        key: Key,
+        key: Key | None = None,
         encrypt_images: bool = False,
     ) -> EncryptionResponse[PlnM, AAD_DATA, Key]:
 
