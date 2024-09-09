@@ -108,11 +108,12 @@ class ImagesAdaptiveCipherParams(AdaptiveCipherParams):
     @classmethod
     def validate_fields(cls, data: Any):
         p, q, r = data.get("p"), data.get("q"), data.get("r")
-        assert p and q and r  # all fields must be provided
-        assert p >= 1
-        assert q >= 1
-        assert r >= 1
-        assert p + q + r == 8
+        if not (p and q and r ):  # all fields must be provided
+            raise ValueError(f'All three cipher parameters must be specified.')
+        if not (p >= 1 and q >= 1 and r >= 1):
+            raise ValueError(f'All three cipher parameters must be >= 1.')
+        if not (p+q+r==8):
+            raise ValueError(f'For full scale image encryption, cipher parameters sum must equal 8.')
         return data
 
     @cached_property
@@ -146,11 +147,12 @@ class MeshesAdaptiveCipherParams(AdaptiveCipherParams):
     @classmethod
     def validate_fields(cls, data: Any):
         p, q, r = data.get("p"), data.get("q"), data.get("r")
-        assert p and q and r  # all fields must be provided
-        assert p >= 1
-        assert q >= 1
-        assert r >= 1
-        assert p + q + r <= 23
+        if not (p is not None and q is not None and r is not None ):  # all fields must be provided
+            raise ValueError(f'All three cipher parameters must be specified.')
+        if not (p >= 1 and q >= 1 and r >= 1):
+            raise ValueError(f'All three cipher parameters must be >= 1.')
+        if not (p+q+r<=23):
+            raise ValueError(f'Sum of cipher parameters must be <=23.')
         return data
 
     @cached_property

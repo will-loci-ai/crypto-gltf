@@ -45,6 +45,9 @@ class Asset:
         """Encrypt a file"""
         self.images_encrypted = encrypt_images
 
+        if len(meshes_cipher_params)!=3 or len(images_cipher_params)!=3:
+            raise ValueError(f'All three cipher parameters must be specified.')
+        
         mesh_params = MeshesAdaptiveCipherParams(
             p=meshes_cipher_params[0],
             q=meshes_cipher_params[1],
