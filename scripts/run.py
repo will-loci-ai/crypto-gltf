@@ -11,7 +11,7 @@ ASSET_PATHS = [
 ]
 if __name__ == "__main__":
 
-    filepath = ASSET_PATHS[0]
+    filepath = ASSET_PATHS[0] 
     asset = Asset.load(str(filepath))
 
     with TemporaryDirectory() as tmp_dir:

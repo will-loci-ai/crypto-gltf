@@ -1,6 +1,6 @@
 # Crypto-glTF
 
-This package implements adaptive, hierarchical encryption and decryption of 3D `.glTF` or `.glb` files
+This package implements adaptive, hierarchical encryption and decryption of 3D `.glTF` or `.glb` files.
 It is suppprted for Python3.10 and above.
 
 ## Quickstart
