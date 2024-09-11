@@ -1,6 +1,7 @@
 # Crypto-glTF
 
 This package implements adaptive, hierarchical encryption and decryption of 3D `.glTF` or `.glb` files.
+The package is only suported for a Linux OS, for alternative architectures, please recompile the C function DLL, or contact will@loci.ai for support.
 It is suppprted for Python3.10 and above.
 
 ## Quickstart

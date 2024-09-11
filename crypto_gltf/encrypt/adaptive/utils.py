@@ -1,7 +1,7 @@
 import platform
 from ctypes import CDLL, c_size_t, c_uint32
 from pathlib import Path
-
+from loguru import logger
 import numpy as np
 
 
@@ -13,23 +13,21 @@ def buffer_length(start: int, stop: int, rows: int, cols: int, slices: int = 1) 
 
 
 match platform.system():
-    case "Darwin":
+    case "Linux":
+        CLIB_FILEPATH = str(
+            Path(__file__).parent.parent.parent.resolve() / "clib/clib.so"
+        )
+    case _:
         CLIB_FILEPATH = str(
             Path(__file__).parent.parent.parent.resolve() / "clib/clib_mac.so"
         )
-    case "Linux":
-        CLIB_FILEPATH = str(
-            Path(__file__).parent.parent.parent.resolve() / "clib/clib_linux.so"
-        )
-    case _:
-        raise Exception(
-            f"Package not supported for the current OS: {platform.system()}, please try again with Mac or Linux."
-        )
+        logger.warning('Non-linux OS detected. The package DLL library may fail on your architecture.')
+
 
 try:
     clib = CDLL(CLIB_FILEPATH)
 except:
-    raise Exception(f"Error: clib.so library has not been built.")
+    raise Exception(f"Error: invalid DLL file for current architecture. Please recomplie the C library, or contact will@loci.ai for support.")
 
 NP_FLOAT32_ARR_2D = np.ctypeslib.ndpointer(dtype=np.float32, ndim=2, flags="C")
 NP_UINT32_ARR_1D = np.ctypeslib.ndpointer(dtype=np.uint32, ndim=1, flags="C")
