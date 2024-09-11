@@ -1,3 +1,4 @@
+import platform
 from ctypes import CDLL, c_size_t, c_uint32
 from pathlib import Path
 
@@ -11,7 +12,19 @@ def buffer_length(start: int, stop: int, rows: int, cols: int, slices: int = 1) 
     return (num_bits - 1) // 32 + 1
 
 
-CLIB_FILEPATH = str(Path(__file__).parent.parent.parent.resolve() / "clib/clib.so")
+match platform.system():
+    case "Darwin":
+        CLIB_FILEPATH = str(
+            Path(__file__).parent.parent.parent.resolve() / "clib/clib_mac.so"
+        )
+    case "Linux":
+        CLIB_FILEPATH = str(
+            Path(__file__).parent.parent.parent.resolve() / "clib/clib_linux.so"
+        )
+    case _:
+        raise Exception(
+            f"Package not supported for the current OS: {platform.system()}, please try again with Mac or Linux."
+        )
 
 try:
     clib = CDLL(CLIB_FILEPATH)

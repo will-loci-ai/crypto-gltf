@@ -41,4 +41,4 @@ build:
 		rm -f *.so
 		rm -f run
 
-		cc -fPIC -shared -o clib.so *.c
+		cc -fPIC -shared -o clib_linux.so *.c
